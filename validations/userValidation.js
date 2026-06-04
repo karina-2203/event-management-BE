@@ -70,47 +70,5 @@ const createUserSchema = Joi.object({
       "any.only": `Role must be one of: ${roles.USER}, ${roles.ADMIN}, ${roles.ORGANIZATION}`,
     }),
 });
-
-/**
- * Validation schema for updating a user
- */
-const updateUserSchema = Joi.object({
-  name: Joi.string()
-    .trim()
-    .optional()
-    .min(2)
-    .max(100),
-
-  email: Joi.string()
-    .trim()
-    .lowercase()
-    .email()
-    .optional(),
-
-  password: Joi.string()
-    .optional()
-    .min(8)
-    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
-
-  phone_number: Joi.string()
-    .pattern(/^[0-9+\-\s()]+$/)
-    .optional(),
-
-  profile_image: Joi.string()
-    .trim()
-    .uri()
-    .optional(),
-
-  status: Joi.string()
-    .valid(status.ACTIVE, status.INACTIVE)
-    .optional(),
-
-  role: Joi.string()
-    .valid(roles.USER, roles.ADMIN, roles.ORGANIZATION)
-    .optional(),
-}).min(1);
-
 module.exports = {
-  createUserSchema,
-  updateUserSchema,
-};
+  createUserSchema};
