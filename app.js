@@ -3,6 +3,7 @@ require('dotenv').config();
 const connectDB = require('./libs/helpers/db');
 const express = require('express');
 const cors = require('cors');
+const logger = require('./loggers/logger')
 const app = express();
 
 app.use(express.json());
@@ -19,5 +20,5 @@ app.use(cors({
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+    logger.info(`Server started on port ${PORT}`);
 });
