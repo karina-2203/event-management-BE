@@ -1,29 +1,19 @@
-const User = require('../models/user')
-const handleResponse = require('../libs/helpers/handleResponse');
-const { ResponseData } = require('../libs/utils/enums');
-const { StatusCodes } = require('http-status-codes');
-const message = require('../libs/utils/message');
+const User = require("../models/user");
+const handleResponse = require("../libs/helpers/handleResponse");
+const { ResponseData } = require("../libs/utils/enums");
+const { StatusCodes } = require("http-status-codes");
+const { ADD_SUCCESS } = require("../libs/utils/message");
 const createUser = async (userData) => {
-    try {
-        const user = await User.create(userData);
+  const createdUser = await User.create(userData);
 
-        return handleResponse(
-            StatusCodes.CREATED,
-            ResponseData.SUCCESS,
-            message.USER_CREATED,
-            user
-        );
-    } catch (error) {
-        handleResponse(
-            StatusCodes.BAD_REQUEST,
-            ResponseData.ERROR,
-            error.message,
-            null,
-            error
-        );
-    }
+  return handleResponse(
+    StatusCodes.CREATED,
+    ResponseData.SUCCESS,
+    ADD_SUCCESS,
+    createdUser,
+  );
 };
 
 module.exports = {
-    createUser
-}
+  createUser,
+};
