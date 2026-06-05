@@ -5,20 +5,19 @@ const { AppError } = require("./handleException");
 const handleResponse = (
   statusCode,
   status,
-  message,
+  message = null,
   data = null,
-  error = null
+  error = null,
 ) => {
   const resolvedStatusCode = statusCode || StatusCodes.OK;
 
+  const response = { statusCode: resolvedStatusCode, status };
+  if (message !== null) response.message = message;
+  if (data !== null) response.data = data;
+  if (error !== null) response.error = error;
+
   if (status === responseData.SUCCESS) {
-    return {
-      statusCode: resolvedStatusCode,
-      status,
-      message,
-      data,
-      error,
-    };
+    return response;
   }
 
   throw new AppError(
@@ -26,7 +25,7 @@ const handleResponse = (
     status,
     message,
     data,
-    error
+    error,
   );
 };
 

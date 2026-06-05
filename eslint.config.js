@@ -11,17 +11,17 @@ export default [
         require: "readonly",
         module: "writable",
         process: "readonly",
-        console: "readonly"
-      }
+        console: "readonly",
+      },
     },
     linterOptions: {
-      reportUnusedDisableDirectives: true
+      reportUnusedDisableDirectives: true,
     },
     rules: {
       // Recommended cleanliness rules
       "no-console": "warn",
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-      "no-undef": "error"
-    }
-  }
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "no-undef": "error",
+    },
+  },
 ];

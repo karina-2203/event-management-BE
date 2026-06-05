@@ -12,8 +12,10 @@ const createUser = async (userData) => {
   return handleResponse(
     StatusCodes.CREATED,
     responseData.SUCCESS,
-    message.ADD_SUCCESS,
-    createdUser,
+    `User ${message.ADD_SUCCESS}`,
+    {
+      _id: createdUser._id,
+    },
   );
 };
 

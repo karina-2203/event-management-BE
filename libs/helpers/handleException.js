@@ -7,7 +7,7 @@ class AppError extends Error {
     status = "error",
     message = "Something went wrong",
     data = null,
-    error = null
+    error = null,
   ) {
     super(message);
     this.name = this.constructor.name;
