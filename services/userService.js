@@ -4,9 +4,16 @@ const { responseData } = require("../libs/utils/enums");
 const { StatusCodes } = require("http-status-codes");
 const message = require("../libs/utils/message");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const createUser = async (userData) => {
+  // Hash the password before saving
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+
+  // Replace plain password with hashed password
+  userData.password = hashedPassword;
+
   const createdUser = await user.create(userData);
 
   return handleResponse(
@@ -23,51 +30,44 @@ const createUser = async (userData) => {
  * Generate JWT token for authenticated user
  */
 const generateAuthToken = (userId) => {
-  const token = jwt.sign(
-    { _id: userId },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+  const token = jwt.sign({ _id: userId }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
   return token;
 };
 
 const login = async ({ email, password }) => {
-  const userRecord = await user.findOne({ email: email && email.toLowerCase() });
+  const userRecord = await user.findOne({ email });
   if (!userRecord) {
     return handleResponse(
       StatusCodes.UNAUTHORIZED,
       responseData.ERROR,
-      "Invalid credentials"
+      message.INVALID_CREDENTIALS,
     );
   }
 
-  const stored = userRecord.password || "";
-  let match = false;
-  // if stored password looks like a bcrypt hash, compare using bcrypt
-  if (typeof stored === "string" && stored.startsWith("$2")) {
-    match = await bcrypt.compare(password, stored);
-  } else {
-    match = stored === password;
-  }
+  // Compare plain password with hashed password
+  const isPasswordValid = await bcrypt.compare(password, userRecord.password);
 
-  if (!match) {
+  if (!isPasswordValid) {
     return handleResponse(
       StatusCodes.UNAUTHORIZED,
       responseData.ERROR,
-      "Invalid credentials"
+      "Invalid credentials",
     );
   }
 
-  const userObj = userRecord.toObject ? userRecord.toObject() : userRecord;
-  delete userObj.password;
-
   const token = generateAuthToken(userRecord._id);
   const payload = {
-    user: userObj,
     token,
   };
 
-  return handleResponse(StatusCodes.OK, responseData.SUCCESS, "Login successful", payload);
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    message.LOGIN_SUCCESS,
+    payload,
+  );
 };
 
 module.exports = {

@@ -6,4 +6,6 @@ module.exports = {
   CONNECTION_DB_SUCCESS: "Connected to MongoDB",
   CONNECTION_DB_ERROR: "Error connecting to MongoDB",
   VALIDATION_FAILED: "Validation failed",
+  INVALID_CREDENTIALS: "Credentials dose not match",
+  LOGIN_SUCCESS: "Login successfully",
 };

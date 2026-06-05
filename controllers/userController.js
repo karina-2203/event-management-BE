@@ -7,12 +7,8 @@ const createUser = async (req, res) => {
 };
 
 const login = async (req, res, next) => {
-  try {
-    const responseData = await userService.login(req.body);
-    return res.status(StatusCodes.OK).json(responseData);
-  } catch (error) {
-    next(error);
-  }
+  const responseData = await userService.login(req.body);
+  return res.status(StatusCodes.OK).json(responseData);
 };
 
 module.exports = {
