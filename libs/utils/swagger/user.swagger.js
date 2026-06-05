@@ -294,4 +294,360 @@ const fileUploadPath = {
   },
 };
 
-module.exports = { userTag, createUserPath, loginPath, fileUploadPath };
+const getProfilePath = {
+  "/api/users/profile": {
+    get: {
+      summary: "Get user profile",
+      tags: ["Users"],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      responses: {
+        200: {
+          description: "User profile retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "User get successfully.",
+                  },
+                  data: {
+                    type: "object",
+                    properties: {
+                      _id: {
+                        type: "string",
+                        example: "507f1f77bcf86cd799439011",
+                      },
+                      name: {
+                        type: "string",
+                        example: "John Doe",
+                      },
+                      email: {
+                        type: "string",
+                        example: "john@example.com",
+                      },
+                      phone_number: {
+                        type: "number",
+                        example: 9876543210,
+                      },
+                      profile_image: {
+                        type: "string",
+                        example: "file-1735245789123-123456789.jpg",
+                      },
+                      status: {
+                        type: "string",
+                        example: "active",
+                      },
+                      role: {
+                        type: "string",
+                        example: "user",
+                      },
+                      createdAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T10:30:00.000Z",
+                      },
+                      updatedAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T10:30:00.000Z",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        401: {
+          description: "Access token is required",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 401,
+                  },
+                  status: {
+                    type: "string",
+                    example: "Fail",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Access token is required",
+                  },
+                },
+              },
+            },
+          },
+        },
+        403: {
+          description: "Invalid or expired token",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 403,
+                  },
+                  status: {
+                    type: "string",
+                    example: "Fail",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Invalid or expired token",
+                  },
+                },
+              },
+            },
+          },
+        },
+        404: {
+          description: "User not found",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 404,
+                  },
+                  status: {
+                    type: "string",
+                    example: "Fail",
+                  },
+                  message: {
+                    type: "string",
+                    example: "User not found",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+const updateProfilePath = {
+  "/api/users/profile": {
+    put: {
+      summary: "Update user profile",
+      tags: ["Users"],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                name: {
+                  type: "string",
+                  example: "John Updated",
+                },
+                phone_number: {
+                  type: "number",
+                  example: 9876543210,
+                },
+                profile_image: {
+                  type: "string",
+                  example: "file-1735245789123-123456789.jpg",
+                },
+                status: {
+                  type: "string",
+                  enum: ["active", "inactive"],
+                  example: "active",
+                },
+                role: {
+                  type: "string",
+                  enum: ["user", "organization"],
+                  example: "user",
+                },
+                newPassword: {
+                  type: "string",
+                  example: "NewPassword@123",
+                  description: "Optional: New password to update",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Profile updated successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "User updated successfully.",
+                  },
+                  data: {
+                    type: "object",
+                    properties: {
+                      _id: {
+                        type: "string",
+                        example: "507f1f77bcf86cd799439011",
+                      },
+                      name: {
+                        type: "string",
+                        example: "John Updated",
+                      },
+                      email: {
+                        type: "string",
+                        example: "john@example.com",
+                      },
+                      phone_number: {
+                        type: "number",
+                        example: 9876543210,
+                      },
+                      profile_image: {
+                        type: "string",
+                        example: "file-1735245789123-123456789.jpg",
+                      },
+                      status: {
+                        type: "string",
+                        example: "active",
+                      },
+                      role: {
+                        type: "string",
+                        example: "user",
+                      },
+                      createdAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T10:30:00.000Z",
+                      },
+                      updatedAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T11:00:00.000Z",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        401: {
+          description: "Access token is required",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 401,
+                  },
+                  status: {
+                    type: "string",
+                    example: "Fail",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Access token is required",
+                  },
+                },
+              },
+            },
+          },
+        },
+        403: {
+          description: "Invalid or expired token",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 403,
+                  },
+                  status: {
+                    type: "string",
+                    example: "Fail",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Invalid or expired token",
+                  },
+                },
+              },
+            },
+          },
+        },
+        404: {
+          description: "User not found",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 404,
+                  },
+                  status: {
+                    type: "string",
+                    example: "Fail",
+                  },
+                  message: {
+                    type: "string",
+                    example: "User not found",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+module.exports = {
+  userTag,
+  createUserPath,
+  loginPath,
+  fileUploadPath,
+  getProfilePath,
+  updateProfilePath,
+};
