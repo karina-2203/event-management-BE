@@ -23,7 +23,7 @@ class AppError extends Error {
  * Global exception filter middleware for centralized error handling
  * Handles AppError, validation errors, MongoDB errors, and generic errors
  */
-const handleException = (err, req, res) => {
+const handleException = (err, req, res, next) => {
   let statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
   let status = responseData.ERROR;
   let message = "Something went wrong";
@@ -51,10 +51,7 @@ const handleException = (err, req, res) => {
     statusCode = StatusCodes.BAD_REQUEST;
     status = responseData.ERROR;
     message = "Validation failed";
-    const validationErrors = Object.values(err.errors).map((e) => ({
-      field: e.path,
-      message: e.message,
-    }));
+    const validationErrors = Object.values(err.errors).map((e) => e.message);
     data = validationErrors;
     error = process.env.NODE_ENV === "production" ? null : err;
   }
