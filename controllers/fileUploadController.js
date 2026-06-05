@@ -11,7 +11,6 @@ const fileUpload = async (req, res) => {
 
 const handleMulterError = async (err, req, res, next) => {
   if (err) {
-    // Pass error to service for handling
     const responseData = await fileUploadService.fileUpload(req.file, err);
     return res
       .status(responseData.statusCode || StatusCodes.BAD_REQUEST)
