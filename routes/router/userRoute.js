@@ -8,7 +8,7 @@ const { createUserSchema } = require("../../validations/userValidation");
 router.post(
   "/create",
   validateRequest(createUserSchema, "body"),
-  userController.createUser
+  userController.createUser,
 );
 
 module.exports = router;

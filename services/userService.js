@@ -13,7 +13,7 @@ const createUser = async (userData) => {
     `User ${message.ADD_SUCCESS}`,
     {
       _id: createdUser._id,
-    }
+    },
   );
 };
 
