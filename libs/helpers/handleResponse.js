@@ -7,7 +7,7 @@ const handleResponse = (
   status,
   message,
   data = null,
-  error = null,
+  error = null
 ) => {
   const resolvedStatusCode = statusCode || StatusCodes.OK;
 
@@ -26,7 +26,7 @@ const handleResponse = (
     status,
     message,
     data,
-    error,
+    error
   );
 };
 

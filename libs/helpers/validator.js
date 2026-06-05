@@ -28,7 +28,7 @@ const validateRequest = (schema, source = "body") => {
         responseData.ERROR,
         message.VALIDATION_FAILED,
         validationErrors,
-        null,
+        null
       );
     }
 

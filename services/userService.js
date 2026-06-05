@@ -5,7 +5,6 @@ const { StatusCodes } = require("http-status-codes");
 const message = require("../libs/utils/message");
 
 const createUser = async (userData) => {
-  console.log(userData);
   const createdUser = await user.create(userData);
 
   return handleResponse(
@@ -14,7 +13,7 @@ const createUser = async (userData) => {
     `User ${message.ADD_SUCCESS}`,
     {
       _id: createdUser._id,
-    },
+    }
   );
 };
 
