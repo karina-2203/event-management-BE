@@ -12,6 +12,8 @@ export default [
         module: "writable",
         process: "readonly",
         console: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
       },
     },
     linterOptions: {

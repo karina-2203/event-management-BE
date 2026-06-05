@@ -7,7 +7,7 @@ const {
   createUserSchema,
   loginSchema,
 } = require("../../validations/userValidation");
-const commonController = require("../../controllers/commonController");
+const fileController = require("../../controllers/fileUploadController");
 
 router.post(
   "/create",
@@ -19,6 +19,6 @@ router.post(
   validateRequest(loginSchema, "body"),
   userController.login,
 );
-router.post("/file-upload", commonController.fileUpload);
+router.post("/file-upload", fileController.fileUpload);
 
 module.exports = router;

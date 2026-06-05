@@ -1,7 +1,12 @@
 const swaggerJsdoc = require("swagger-jsdoc");
 
 // Import swagger definitions from each module
-const { userTag, createUserPath, loginPath } = require("./user.swagger");
+const {
+  userTag,
+  createUserPath,
+  loginPath,
+  fileUploadPath,
+} = require("./user.swagger");
 
 // Add new module swagger imports here as the project grows:
 // const { authTag, loginPath } = require("./auth.swagger");
@@ -27,6 +32,7 @@ const options = {
     paths: {
       ...createUserPath,
       ...loginPath,
+      ...fileUploadPath,
     },
     components: {
       securitySchemes: {
