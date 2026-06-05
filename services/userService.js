@@ -1,19 +1,18 @@
-const User = require("../models/user");
+const user = require("../models/user");
 const handleResponse = require("../libs/helpers/handleResponse");
-const { ResponseData } = require("../libs/utils/enums");
+const { responseData } = require("../libs/utils/enums");
 const { StatusCodes } = require("http-status-codes");
-const { ADD_SUCCESS } = require("../libs/utils/message");
-const AppError = require("../libs/helpers/handleException");
+const message = require("../libs/utils/message");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
 const createUser = async (userData) => {
-  const createdUser = await User.create(userData);
+  const createdUser = await user.create(userData);
 
   return handleResponse(
     StatusCodes.CREATED,
-    ResponseData.SUCCESS,
-    ADD_SUCCESS,
+    responseData.SUCCESS,
+    message.ADD_SUCCESS,
     createdUser,
   );
 };
@@ -31,12 +30,16 @@ const generateAuthToken = (userId) => {
 };
 
 const login = async ({ email, password }) => {
-  const user = await User.findOne({ email: email && email.toLowerCase() });
-  if (!user) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, ResponseData.ERROR, "Invalid credentials");
+  const userRecord = await user.findOne({ email: email && email.toLowerCase() });
+  if (!userRecord) {
+    return handleResponse(
+      StatusCodes.UNAUTHORIZED,
+      responseData.ERROR,
+      "Invalid credentials"
+    );
   }
 
-  const stored = user.password || "";
+  const stored = userRecord.password || "";
   let match = false;
   // if stored password looks like a bcrypt hash, compare using bcrypt
   if (typeof stored === "string" && stored.startsWith("$2")) {
@@ -46,20 +49,23 @@ const login = async ({ email, password }) => {
   }
 
   if (!match) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, ResponseData.ERROR, "Invalid credentials");
+    return handleResponse(
+      StatusCodes.UNAUTHORIZED,
+      responseData.ERROR,
+      "Invalid credentials"
+    );
   }
 
-  const userObj = user.toObject ? user.toObject() : user;
+  const userObj = userRecord.toObject ? userRecord.toObject() : userRecord;
   delete userObj.password;
 
-  // Generate JWT token and attach it to the response
-  const token = generateAuthToken(user._id);
-  const responseData = {
+  const token = generateAuthToken(userRecord._id);
+  const payload = {
     user: userObj,
     token,
   };
 
-  return handleResponse(StatusCodes.OK, ResponseData.SUCCESS, "Login successful", responseData);
+  return handleResponse(StatusCodes.OK, responseData.SUCCESS, "Login successful", payload);
 };
 
 module.exports = {

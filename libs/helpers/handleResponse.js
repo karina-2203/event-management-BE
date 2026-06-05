@@ -1,17 +1,17 @@
 const { StatusCodes } = require("http-status-codes");
-const { ResponseData } = require("../utils/enums");
-const AppError = require("./handleException");
+const { responseData } = require("../utils/enums");
+const { AppError } = require("./handleException");
 
 const handleResponse = (
   statusCode,
   status,
   message,
   data = null,
-  error = null,
+  error = null
 ) => {
   const resolvedStatusCode = statusCode || StatusCodes.OK;
 
-  if (status === ResponseData.SUCCESS) {
+  if (status === responseData.SUCCESS) {
     return {
       statusCode: resolvedStatusCode,
       status,
@@ -26,7 +26,7 @@ const handleResponse = (
     status,
     message,
     data,
-    error,
+    error
   );
 };
 

@@ -6,22 +6,22 @@ const cors = require("cors");
 const logger = require("./loggers/logger");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./libs/utils/swagger/swagger");
-const allExceptionFilter = require("./libs/helpers/allExceptionFilter");
+const { handleException } = require("./libs/helpers/handleException");
 const app = express();
 
 app.use(express.json());
 app.use(
   cors({
     origin: [process.env.CORS_ORIGIN],
-  }),
+  })
 );
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-require("./libs/utils/routes/route")(app);
+require("./routes/route")(app);
 connectDB();
 
 // Global exception filter (must be last middleware)
-app.use(allExceptionFilter);
+app.use(handleException);
 
 const PORT = process.env.PORT;
 

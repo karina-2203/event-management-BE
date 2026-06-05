@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { status, roles } = require("../libs/utils/enums");
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -35,7 +36,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 module.exports = mongoose.model("user", userSchema);
