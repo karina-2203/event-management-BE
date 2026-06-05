@@ -10,4 +10,7 @@ module.exports = {
   LOGIN_SUCCESS: "Login successfully",
   NO_FILE_UPLOADED: "No file uploaded",
   EMAIL_ALREADY_EXIST: "Email already exists",
+  FILE_SIZE_LIMIT: "exceeds the 5 MB size limit.",
+  FILE_UPLOAD_ERROR: "Error uploading file",
+  ONLY_IMAGE_ALLOWED: "Only image files are allowed!",
 };
