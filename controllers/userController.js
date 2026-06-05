@@ -6,7 +6,7 @@ const createUser = async (req, res) => {
   return res.status(StatusCodes.CREATED).json(responseData);
 };
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const responseData = await userService.login(req.body);
   return res.status(StatusCodes.OK).json(responseData);
 };

@@ -1,6 +1,7 @@
 const responseData = {
   SUCCESS: "success",
   ERROR: "error",
+  FAIL: "Fail"
 };
 
 const status = {

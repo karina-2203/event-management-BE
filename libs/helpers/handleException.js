@@ -71,13 +71,17 @@ const handleException = (err, req, res, next) => {
   }
 
   // Return consistent error response
-  return res.status(statusCode).json({
+  const response = {
     statusCode,
     status,
     message,
-    data,
-    error,
-  });
+  };
+
+  // Only include data and error if they're not null
+  if (data !== null) response.data = data;
+  if (error !== null) response.error = error;
+
+  return res.status(statusCode).json(response);
 };
 
 module.exports = { AppError, handleException };

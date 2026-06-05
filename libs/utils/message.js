@@ -8,4 +8,6 @@ module.exports = {
   VALIDATION_FAILED: "Validation failed",
   INVALID_CREDENTIALS: "Credentials dose not match",
   LOGIN_SUCCESS: "Login successfully",
+  NO_FILE_UPLOADED: "No file uploaded",
+  EMAIL_ALREADY_EXIST: "Email already exists",
 };

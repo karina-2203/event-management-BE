@@ -7,6 +7,18 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const createUser = async (userData) => {
+  
+  const existingUser = await user.findOne({ email: userData.email });
+  
+  if (existingUser) {
+    return handleResponse(
+      StatusCodes.CONFLICT,
+      responseData.FAIL,
+      message.EMAIL_ALREADY_EXIST,
+      null
+    );
+  }
+
   // Hash the password before saving
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
