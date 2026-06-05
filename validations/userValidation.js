@@ -6,12 +6,12 @@ const { status, roles } = require("../libs/utils/enums");
  */
 const createUserSchema = Joi.object({
   name: Joi.string().required().messages({
-    "string.empty": "Name value is required",
+    "string.empty": "Name is don't empty field",
     "any.required": "Name is required",
   }),
 
   email: Joi.string().lowercase().email().required().messages({
-    "string.empty": "Email value is required",
+    "string.empty": "Email is don't empty field",
     "string.email": "Email must be a valid email address",
     "any.required": "Email is required",
   }),
@@ -24,7 +24,7 @@ const createUserSchema = Joi.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
     )
     .messages({
-      "string.empty": "Password value is required",
+      "string.empty": "Password is don't empty field",
       "string.min": "Password must be at least 8 characters",
       "string.pattern.base":
         "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
@@ -62,13 +62,13 @@ const createUserSchema = Joi.object({
  */
 const loginSchema = Joi.object({
   email: Joi.string().trim().lowercase().email().required().messages({
-    "string.empty": "Email value is required",
+    "string.empty": "Email is don't empty field",
     "string.email": "Email must be a valid email address",
     "any.required": "Email is required",
   }),
 
   password: Joi.string().required().messages({
-    "string.empty": "Password value is required",
+    "string.empty": "Password is don't empty field",
     "any.required": "Password is required",
   }),
 });
