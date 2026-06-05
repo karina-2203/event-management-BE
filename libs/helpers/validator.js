@@ -1,4 +1,3 @@
-const { AppError } = require("./handleException");
 const { StatusCodes } = require("http-status-codes");
 const { responseData } = require("../utils/enums");
 const message = require("../utils/message");
@@ -18,18 +17,15 @@ const validateRequest = (schema, source = "body") => {
     });
 
     if (error) {
-      const validationErrors = error.details.map((detail) => ({
-        field: detail.path.join("."),
-        message: detail.message,
-      }));
+      const validationErrors = error.details.map((detail) => detail.message);
 
-      return handleResponse(
-        StatusCodes.BAD_REQUEST,
-        responseData.ERROR,
-        message.VALIDATION_FAILED,
-        validationErrors,
-        null,
-      );
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        statusCode: StatusCodes.BAD_REQUEST,
+        status: responseData.ERROR,
+        message: message.VALIDATION_FAILED,
+        data: validationErrors,
+        error: null,
+      });
     }
 
     req[source] = value;

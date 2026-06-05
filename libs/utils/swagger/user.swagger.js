@@ -75,4 +75,165 @@ const createUserPath = {
   },
 };
 
-module.exports = { userTag, createUserPath };
+const loginPath = {
+  "/api/users/login": {
+    post: {
+      summary: "User login",
+      tags: ["Users"],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["email", "password"],
+              properties: {
+                email: {
+                  type: "string",
+                  format: "email",
+                  example: "john@example.com",
+                },
+                password: {
+                  type: "string",
+                  example: "Password@123",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Login successful",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Login successful",
+                  },
+                  data: {
+                    type: "object",
+                    properties: {
+                      token: {
+                        type: "string",
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                      },
+                      user: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                            example: "507f1f77bcf86cd799439011",
+                          },
+                          name: {
+                            type: "string",
+                            example: "John Doe",
+                          },
+                          email: {
+                            type: "string",
+                            example: "john@example.com",
+                          },
+                          role: {
+                            type: "string",
+                            example: "user",
+                          },
+                        },
+                      },
+                    },
+                  },
+                  error: {
+                    type: "null",
+                    example: null,
+                  },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Validation error",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 400,
+                  },
+                  status: {
+                    type: "string",
+                    example: "error",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Validation failed",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      type: "string",
+                    },
+                    example: ["Email is required"],
+                  },
+                  error: {
+                    type: "null",
+                    example: null,
+                  },
+                },
+              },
+            },
+          },
+        },
+        401: {
+          description: "Invalid credentials",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 401,
+                  },
+                  status: {
+                    type: "string",
+                    example: "error",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Invalid email or password",
+                  },
+                  data: {
+                    type: "null",
+                    example: null,
+                  },
+                  error: {
+                    type: "null",
+                    example: null,
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Internal server error",
+        },
+      },
+    },
+  },
+};
+
+module.exports = { userTag, createUserPath, loginPath };
