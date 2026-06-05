@@ -5,7 +5,14 @@ export default [
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      globals: { window: false, document: false }
+      globals: {
+        window: false,
+        document: false,
+        require: "readonly",
+        module: "writable",
+        process: "readonly",
+        console: "readonly"
+      }
     },
     linterOptions: {
       reportUnusedDisableDirectives: true
