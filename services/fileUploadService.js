@@ -78,8 +78,7 @@ const fileUpload = async (fileData, error = null) => {
     return handleResponse(
       StatusCodes.INTERNAL_SERVER_ERROR,
       responseData.ERROR,
-      error.message || message.FILE_UPLOAD_ERROR,
-      null,
+      error.message || message.FILE_UPLOAD_ERROR
     );
   }
 };
