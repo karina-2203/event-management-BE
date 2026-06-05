@@ -26,8 +26,7 @@ const fileUpload = async (fileData, error = null) => {
         return handleResponse(
           StatusCodes.BAD_REQUEST,
           responseData.ERROR,
-          errorMessage,
-          null,
+          errorMessage
         );
       }
 
@@ -36,8 +35,7 @@ const fileUpload = async (fileData, error = null) => {
         return handleResponse(
           StatusCodes.BAD_REQUEST,
           responseData.ERROR,
-          message.ONLY_IMAGE_ALLOWED,
-          null,
+          message.ONLY_IMAGE_ALLOWED
         );
       }
 
@@ -45,8 +43,7 @@ const fileUpload = async (fileData, error = null) => {
       return handleResponse(
         StatusCodes.INTERNAL_SERVER_ERROR,
         responseData.ERROR,
-        error.message || message.FILE_UPLOAD_ERROR,
-        null,
+        error.message || message.FILE_UPLOAD_ERROR
       );
     }
 
@@ -54,8 +51,7 @@ const fileUpload = async (fileData, error = null) => {
       return handleResponse(
         StatusCodes.BAD_REQUEST,
         responseData.ERROR,
-        message.NO_FILE_UPLOADED,
-        null,
+        message.NO_FILE_UPLOADED
       );
     }
 
