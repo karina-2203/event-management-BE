@@ -1,7 +1,8 @@
-const AppError = require("./handleException");
+const { AppError } = require("./handleException");
 const { StatusCodes } = require("http-status-codes");
-const { ResponseData } = require("../utils/enums");
-
+const { responseData } = require("../utils/enums");
+const message = require("../utils/message");
+const handleResponse = require("../helpers/handleResponse");
 /**
  * Validates incoming request data against a Joi schema
  * @param {Joi.Schema} schema - Joi validation schema
@@ -22,18 +23,15 @@ const validateRequest = (schema, source = "body") => {
         message: detail.message,
       }));
 
-      return next(
-        new AppError(
-          StatusCodes.BAD_REQUEST,
-          ResponseData.ERROR,
-          "Validation failed",
-          validationErrors,
-          null,
-        ),
+      return handleResponse(
+        StatusCodes.BAD_REQUEST,
+        responseData.ERROR,
+        message.VALIDATION_FAILED,
+        validationErrors,
+        null,
       );
     }
 
-    // Replace the original request data with validated data
     req[source] = value;
     next();
   };

@@ -1,20 +1,21 @@
-const ResponseData = {
+const responseData = {
   SUCCESS: "success",
-  ERROR: "error"
+  ERROR: "error",
 };
 
 const status = {
-    ACTIVE: "active",
-    INACTIVE: "inactive"
-}
+  ACTIVE: "active",
+  INACTIVE: "inactive",
+};
 
 const roles = {
-    USER: "user",
-    ADMIN: "admin",
-    ORGANIZATION: "organization"
-}
+  USER: "user",
+  ADMIN: "admin",
+  ORGANIZATION: "organization",
+};
+
 module.exports = {
-  ResponseData,
+  responseData,
   status,
-  roles
+  roles,
 };
