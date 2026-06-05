@@ -36,8 +36,8 @@ const generateAuthToken = (userId) => {
   return token;
 };
 
-const login = async ({ email, password }) => {
-  const userRecord = await user.findOne({ email });
+const login = async (loginData) => {
+  const userRecord = await user.findOne({ email: loginData.email });
   if (!userRecord) {
     return handleResponse(
       StatusCodes.UNAUTHORIZED,
@@ -47,13 +47,16 @@ const login = async ({ email, password }) => {
   }
 
   // Compare plain password with hashed password
-  const isPasswordValid = await bcrypt.compare(password, userRecord.password);
+  const isPasswordValid = await bcrypt.compare(
+    loginData.password,
+    userRecord.password,
+  );
 
   if (!isPasswordValid) {
     return handleResponse(
       StatusCodes.UNAUTHORIZED,
       responseData.ERROR,
-      "Invalid credentials",
+      message.INVALID_CREDENTIALS,
     );
   }
 
