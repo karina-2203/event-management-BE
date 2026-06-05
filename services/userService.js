@@ -7,13 +7,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const createUser = async (userData) => {
-  
+
   const existingUser = await user.findOne({ email: userData.email });
   
   if (existingUser) {
     return handleResponse(
       StatusCodes.CONFLICT,
-      responseData.FAIL,
+      responseData.ERROR,
       message.EMAIL_ALREADY_EXIST,
       null
     );
