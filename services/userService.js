@@ -97,6 +97,7 @@ const getProfile = async (userId) => {
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
+    undefined,
     userRecord,
   );
 };
@@ -123,11 +124,4 @@ const updateProfile = async (userId, updateData) => {
     responseData.SUCCESS,
     `User ${message.UPDATE_SUCCESS}`
   );
-};
-
-module.exports = {
-  createUser,
-  login,
-  getProfile,
-  updateProfile,
 };

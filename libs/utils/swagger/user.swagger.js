@@ -160,77 +160,7 @@ const loginPath = {
               },
             },
           },
-        },
-        400: {
-          description: "Validation error",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  statusCode: {
-                    type: "number",
-                    example: 400,
-                  },
-                  status: {
-                    type: "string",
-                    example: "error",
-                  },
-                  message: {
-                    type: "string",
-                    example: "Validation failed",
-                  },
-                  data: {
-                    type: "array",
-                    items: {
-                      type: "string",
-                    },
-                    example: ["Email is required"],
-                  },
-                  error: {
-                    type: "null",
-                    example: null,
-                  },
-                },
-              },
-            },
-          },
-        },
-        401: {
-          description: "Invalid credentials",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  statusCode: {
-                    type: "number",
-                    example: 401,
-                  },
-                  status: {
-                    type: "string",
-                    example: "error",
-                  },
-                  message: {
-                    type: "string",
-                    example: "Invalid email or password",
-                  },
-                  data: {
-                    type: "null",
-                    example: null,
-                  },
-                  error: {
-                    type: "null",
-                    example: null,
-                  },
-                },
-              },
-            },
-          },
-        },
-        500: {
-          description: "Internal server error",
-        },
+        }
       },
     },
   },
