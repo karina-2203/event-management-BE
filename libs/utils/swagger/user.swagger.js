@@ -160,77 +160,7 @@ const loginPath = {
               },
             },
           },
-        },
-        400: {
-          description: "Validation error",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  statusCode: {
-                    type: "number",
-                    example: 400,
-                  },
-                  status: {
-                    type: "string",
-                    example: "error",
-                  },
-                  message: {
-                    type: "string",
-                    example: "Validation failed",
-                  },
-                  data: {
-                    type: "array",
-                    items: {
-                      type: "string",
-                    },
-                    example: ["Email is required"],
-                  },
-                  error: {
-                    type: "null",
-                    example: null,
-                  },
-                },
-              },
-            },
-          },
-        },
-        401: {
-          description: "Invalid credentials",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  statusCode: {
-                    type: "number",
-                    example: 401,
-                  },
-                  status: {
-                    type: "string",
-                    example: "error",
-                  },
-                  message: {
-                    type: "string",
-                    example: "Invalid email or password",
-                  },
-                  data: {
-                    type: "null",
-                    example: null,
-                  },
-                  error: {
-                    type: "null",
-                    example: null,
-                  },
-                },
-              },
-            },
-          },
-        },
-        500: {
-          description: "Internal server error",
-        },
+        }
       },
     },
   },
@@ -294,4 +224,210 @@ const fileUploadPath = {
   },
 };
 
-module.exports = { userTag, createUserPath, loginPath, fileUploadPath };
+const profilePath = {
+  "/api/users/profile": {
+    get: {
+      summary: "Get user profile",
+      tags: ["Users"],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      responses: {
+        200: {
+          description: "User profile retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "User get successfully.",
+                  },
+                  data: {
+                    type: "object",
+                    properties: {
+                      _id: {
+                        type: "string",
+                        example: "507f1f77bcf86cd799439011",
+                      },
+                      name: {
+                        type: "string",
+                        example: "John Doe",
+                      },
+                      email: {
+                        type: "string",
+                        example: "john@example.com",
+                      },
+                      phone_number: {
+                        type: "number",
+                        example: 9876543210,
+                      },
+                      profile_image: {
+                        type: "string",
+                        example: "file-1735245789123-123456789.jpg",
+                      },
+                      status: {
+                        type: "string",
+                        example: "active",
+                      },
+                      role: {
+                        type: "string",
+                        example: "user",
+                      },
+                      createdAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T10:30:00.000Z",
+                      },
+                      updatedAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T10:30:00.000Z",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    put: {
+      summary: "Update user profile",
+      tags: ["Users"],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                name: {
+                  type: "string",
+                  example: "John Updated",
+                },
+                phone_number: {
+                  type: "number",
+                  example: 9876543210,
+                },
+                profile_image: {
+                  type: "string",
+                  example: "file-1735245789123-123456789.jpg",
+                },
+                status: {
+                  type: "string",
+                  enum: ["active", "inactive"],
+                  example: "active",
+                },
+                role: {
+                  type: "string",
+                  enum: ["user", "organization"],
+                  example: "user",
+                },
+                newPassword: {
+                  type: "string",
+                  example: "NewPassword@123",
+                  description: "Optional: New password to update",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Profile updated successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "User updated successfully.",
+                  },
+                  data: {
+                    type: "object",
+                    properties: {
+                      _id: {
+                        type: "string",
+                        example: "507f1f77bcf86cd799439011",
+                      },
+                      name: {
+                        type: "string",
+                        example: "John Updated",
+                      },
+                      email: {
+                        type: "string",
+                        example: "john@example.com",
+                      },
+                      phone_number: {
+                        type: "number",
+                        example: 9876543210,
+                      },
+                      profile_image: {
+                        type: "string",
+                        example: "file-1735245789123-123456789.jpg",
+                      },
+                      status: {
+                        type: "string",
+                        example: "active",
+                      },
+                      role: {
+                        type: "string",
+                        example: "user",
+                      },
+                      createdAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T10:30:00.000Z",
+                      },
+                      updatedAt: {
+                        type: "string",
+                        format: "date-time",
+                        example: "2024-12-27T11:00:00.000Z",
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+module.exports = {
+  userTag,
+  createUserPath,
+  loginPath,
+  fileUploadPath,
+  profilePath,
+};

@@ -8,6 +8,7 @@ const {
   loginSchema,
 } = require("../../validations/userValidation");
 const fileController = require("../../controllers/fileUploadController");
+const { authenticateToken } = require("../../libs/service/authentication/auth");
 
 router.post(
   "/create",
@@ -20,5 +21,7 @@ router.post(
   userController.login,
 );
 router.post("/file-upload", fileController.fileUpload);
+router.get("/profile", authenticateToken, userController.getProfile);
+router.put("/profile", authenticateToken, userController.updateProfile);
 
 module.exports = router;

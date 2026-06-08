@@ -11,7 +11,21 @@ const login = async (req, res) => {
   return res.status(StatusCodes.OK).json(responseData);
 };
 
+const getProfile = async (req, res) => {
+  const userId = req.user._id;
+  const responseData = await userService.getProfile(userId);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
+const updateProfile = async (req, res) => {
+  const userId = req.user._id;
+  const responseData = await userService.updateProfile(userId, req.body);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
 module.exports = {
   createUser,
   login,
+  getProfile,
+  updateProfile,
 };

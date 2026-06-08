@@ -7,15 +7,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const createUser = async (userData) => {
-
   const existingUser = await user.findOne({ email: userData.email });
-  
+
   if (existingUser) {
     return handleResponse(
       StatusCodes.CONFLICT,
       responseData.ERROR,
-      message.EMAIL_ALREADY_EXIST,
-      null
+      message.EMAIL_ALREADY_EXIST
     );
   }
 
@@ -85,7 +83,52 @@ const login = async (loginData) => {
   );
 };
 
+const getProfile = async (userId) => {
+  const userRecord = await user.findById(userId).select("-password");
+
+  if (!userRecord) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.USER_NOT_FOUND,
+    );
+  }
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    undefined,
+    userRecord,
+  );
+};
+
+const updateProfile = async (userId, updateData) => {
+  delete updateData.password;
+  delete updateData.email;
+  delete updateData._id;
+
+  const updatedUser = await user
+    .findByIdAndUpdate(userId, updateData, { new: true })
+    .select("-password");
+
+  if (!updatedUser) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.USER_NOT_FOUND,
+    );
+  }
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `User ${message.UPDATE_SUCCESS}`
+  );
+};
+
 module.exports = {
   createUser,
   login,
+  getProfile,
+  updateProfile
 };
