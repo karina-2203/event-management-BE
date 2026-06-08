@@ -160,14 +160,14 @@ const loginPath = {
               },
             },
           },
-        }
+        },
       },
     },
   },
 };
 
 const fileUploadPath = {
-  "/common/file-upload": {
+  "/common/fileUpload": {
     post: {
       summary: "Upload an image file",
       tags: ["Users"],
@@ -224,8 +224,8 @@ const fileUploadPath = {
   },
 };
 
-const profilePath = {
-  "/api/users/profile": {
+const getProfilePath = {
+  "/api/users/viewProfile": {
     get: {
       summary: "Get user profile",
       tags: ["Users"],
@@ -304,6 +304,11 @@ const profilePath = {
         },
       },
     },
+  },
+};
+
+const updateProfilePath = {
+  "/api/users/editProfile": {
     put: {
       summary: "Update user profile",
       tags: ["Users"],
@@ -340,11 +345,6 @@ const profilePath = {
                   type: "string",
                   enum: ["user", "organization"],
                   example: "user",
-                },
-                newPassword: {
-                  type: "string",
-                  example: "NewPassword@123",
-                  description: "Optional: New password to update",
                 },
               },
             },
@@ -424,10 +424,218 @@ const profilePath = {
   },
 };
 
+const verifyEmailPath = {
+  "/api/users/verifyEmail": {
+    post: {
+      summary: "verify Email",
+      tags: ["Users"],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["email"],
+              properties: {
+                email: {
+                  type: "string",
+                  format: "email",
+                  example: "john@example.com",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        201: {
+          description: "OTP sent successfully",
+        },
+      },
+    },
+  },
+};
+
+const updatePasswordPath = {
+  "/api/users/updatePassword": {
+    put: {
+      summary: "Update password using OTP",
+      tags: ["Users"],
+      description: "Reset password using email verification OTP",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["email", "otp", "newPassword", "confirmPassword"],
+              properties: {
+                email: {
+                  type: "string",
+                  format: "email",
+                  example: "john@example.com",
+                },
+                otp: {
+                  type: "number",
+                  minimum: 100000,
+                  maximum: 999999,
+                  example: 123456,
+                  description: "6-digit OTP received via email",
+                },
+                newPassword: {
+                  type: "string",
+                  minLength: 8,
+                  example: "NewPassword@123",
+                  description:
+                    "Must contain uppercase, lowercase, number, and special character",
+                },
+                confirmPassword: {
+                  type: "string",
+                  minLength: 8,
+                  example: "NewPassword@123",
+                  description: "Must match newPassword",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Password updated successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Password updated successfully",
+                  },
+                  data: {
+                    type: "null",
+                    example: null,
+                  },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Invalid OTP or validation error",
+        },
+        404: {
+          description: "User not found",
+        },
+        500: {
+          description: "Internal server error",
+        },
+      },
+    },
+  },
+};
+
+const changePasswordPath = {
+  "/api/users/changePassword": {
+    put: {
+      summary: "Change password for authenticated user",
+      tags: ["Users"],
+      description: "Change password for logged-in user using current password",
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["currentPassword", "newPassword", "confirmPassword"],
+              properties: {
+                currentPassword: {
+                  type: "string",
+                  example: "OldPassword@123",
+                  description: "Current password for verification",
+                },
+                newPassword: {
+                  type: "string",
+                  minLength: 8,
+                  example: "NewPassword@123",
+                  description:
+                    "Must contain uppercase, lowercase, number, and special character",
+                },
+                confirmPassword: {
+                  type: "string",
+                  minLength: 8,
+                  example: "NewPassword@123",
+                  description: "Must match newPassword",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Password changed successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Password changed successfully",
+                  },
+                  data: {
+                    type: "null",
+                    example: null,
+                  },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Validation error or incorrect current password",
+        },
+        401: {
+          description: "Unauthorized - Invalid or missing token",
+        },
+        500: {
+          description: "Internal server error",
+        },
+      },
+    },
+  },
+};
+
 module.exports = {
   userTag,
   createUserPath,
   loginPath,
   fileUploadPath,
-  profilePath,
+  getProfilePath,
+  updateProfilePath,
+  verifyEmailPath,
+  updatePasswordPath,
+  changePasswordPath,
 };

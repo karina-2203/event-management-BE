@@ -23,9 +23,28 @@ const updateProfile = async (req, res) => {
   return res.status(StatusCodes.OK).json(responseData);
 };
 
+const verifyEmail = async (req, res) => {
+  const responseData = await userService.verifyEmail(req.body);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
+const updatePassword = async (req, res) => {
+  const responseData = await userService.updatePassword(req.body);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
+const changePassword = async (req, res) => {
+  const userId = req.user._id;
+  const responseData = await userService.changePassword(userId, req.body);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
 module.exports = {
   createUser,
   login,
   getProfile,
   updateProfile,
+  changePassword,
+  verifyEmail,
+  updatePassword,
 };

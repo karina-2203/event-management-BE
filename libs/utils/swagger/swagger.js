@@ -6,7 +6,11 @@ const {
   createUserPath,
   loginPath,
   fileUploadPath,
-  profilePath,
+  getProfilePath,
+  updateProfilePath,
+  verifyEmailPath,
+  updatePasswordPath,
+  changePasswordPath,
 } = require("./user.swagger");
 
 // Add new module swagger imports here as the project grows:
@@ -34,7 +38,11 @@ const options = {
       ...createUserPath,
       ...loginPath,
       ...fileUploadPath,
-      ...profilePath,
+      ...getProfilePath,
+      ...updateProfilePath,
+      ...verifyEmailPath,
+      ...updatePasswordPath,
+      ...changePasswordPath,
     },
     components: {
       securitySchemes: {
