@@ -125,3 +125,10 @@ const updateProfile = async (userId, updateData) => {
     `User ${message.UPDATE_SUCCESS}`
   );
 };
+
+module.exports = {
+  createUser,
+  login,
+  getProfile,
+  updateProfile
+};
