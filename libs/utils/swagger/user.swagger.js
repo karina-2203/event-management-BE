@@ -294,7 +294,7 @@ const fileUploadPath = {
   },
 };
 
-const getProfilePath = {
+const profilePath = {
   "/api/users/profile": {
     get: {
       summary: "Get user profile",
@@ -371,14 +371,9 @@ const getProfilePath = {
               },
             },
           },
-        }
+        },
       },
     },
-  },
-};
-
-const updateProfilePath = {
-  "/api/users/profile": {
     put: {
       summary: "Update user profile",
       tags: ["Users"],
@@ -493,7 +488,7 @@ const updateProfilePath = {
               },
             },
           },
-        }
+        },
       },
     },
   },
@@ -504,6 +499,5 @@ module.exports = {
   createUserPath,
   loginPath,
   fileUploadPath,
-  getProfilePath,
-  updateProfilePath,
+  profilePath,
 };
