@@ -13,8 +13,7 @@ const createUser = async (userData) => {
     return handleResponse(
       StatusCodes.CONFLICT,
       responseData.ERROR,
-      message.EMAIL_ALREADY_EXIST,
-      null,
+      message.EMAIL_ALREADY_EXIST
     );
   }
 
@@ -98,7 +97,6 @@ const getProfile = async (userId) => {
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
-    `User ${message.GET_SUCCESS}`,
     userRecord,
   );
 };
@@ -123,8 +121,7 @@ const updateProfile = async (userId, updateData) => {
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
-    `User ${message.UPDATE_SUCCESS}`,
-    updatedUser,
+    `User ${message.UPDATE_SUCCESS}`
   );
 };
 
