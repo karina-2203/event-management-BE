@@ -11,6 +11,9 @@ const {
   verifyEmailPath,
   updatePasswordPath,
   changePasswordPath,
+  listOfCountryPath,
+  listOfStatePath,
+  listOfCityPath,
 } = require("./user.swagger");
 
 // Add new module swagger imports here as the project grows:
@@ -43,6 +46,9 @@ const options = {
       ...verifyEmailPath,
       ...updatePasswordPath,
       ...changePasswordPath,
+      ...listOfCountryPath,
+      ...listOfStatePath,
+      ...listOfCityPath,
     },
     components: {
       securitySchemes: {

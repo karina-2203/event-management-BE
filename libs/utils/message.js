@@ -27,4 +27,10 @@ module.exports = {
   CURRENT_PASSWORD: "Current password not matches",
   NEW_PASSWORD_NOT_MATCHES_CURRENT:
     "New password and current password should not be the same",
+  COUNTRY_NOT_FOUND: "Country not found",
+  INVALID_COUNTRY_ID: "Invalid country ID format",
+  STATE_NOT_FOUND: "State not found",
+  INVALID_STATE_ID: "Invalid state ID format",
+  NO_STATES_FOUND: "No states found for this country",
+  NO_CITIES_FOUND: "No cities found for this state",
 };

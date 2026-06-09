@@ -1,3 +1,6 @@
+const city = require("../models/city");
+const state = require("../models/states");
+const country = require("../models/countries");
 const user = require("../models/user");
 const otp = require("../models/otp");
 const handleResponse = require("../libs/helpers/handleResponse");
@@ -14,6 +17,7 @@ const {
 } = require("../libs/service/commonFunction");
 const sendMail = require("../libs/helpers/mail");
 const logger = require("../loggers/logger");
+const mongoose = require("mongoose");
 
 const createUser = async (userData) => {
   const existingUser = await user.findOne({ email: userData.email });
@@ -279,6 +283,96 @@ const changePassword = async (userId, passwordData) => {
   );
 };
 
+const getCountry = async () => {
+  const countries = await country.find();
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `Countries ${message.GET_SUCCESS}`,
+    countries,
+  );
+};
+
+const getState = async (req) => {
+  const { countryId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(countryId)) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.INVALID_COUNTRY_ID,
+    );
+  }
+
+  const countryExists = await country.findById(countryId);
+  if (!countryExists) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.COUNTRY_NOT_FOUND,
+    );
+  }
+
+  const states = await state.find({
+    country_id: countryId,
+  });
+
+  if (!states || states.length === 0) {
+    return handleResponse(
+      StatusCodes.OK,
+      responseData.SUCCESS,
+      message.NO_STATES_FOUND,
+    );
+  }
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `States ${message.GET_SUCCESS}`,
+    states,
+  );
+};
+
+const getCity = async (req) => {
+  const { stateId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(stateId)) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.INVALID_STATE_ID,
+    );
+  }
+
+  const stateExists = await state.findById(stateId);
+  if (!stateExists) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.STATE_NOT_FOUND,
+    );
+  }
+
+  const cities = await city.find({
+    state_id: stateId,
+  });
+
+  if (!cities || cities.length === 0) {
+    return handleResponse(
+      StatusCodes.OK,
+      responseData.SUCCESS,
+      message.NO_CITIES_FOUND,
+    );
+  }
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `Cities ${message.GET_SUCCESS}`,
+    cities,
+  );
+};
+
 module.exports = {
   createUser,
   login,
@@ -287,4 +381,7 @@ module.exports = {
   changePassword,
   verifyEmail,
   updatePassword,
+  getCountry,
+  getState,
+  getCity,
 };

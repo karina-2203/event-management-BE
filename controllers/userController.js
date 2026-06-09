@@ -39,6 +39,21 @@ const changePassword = async (req, res) => {
   return res.status(StatusCodes.OK).json(responseData);
 };
 
+const country = async (_req, res) => {
+  const responseData = await userService.getCountry();
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
+const state = async (req, res) => {
+  const responseData = await userService.getState(req);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
+const city = async (req, res) => {
+  const responseData = await userService.getCity(req);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
 module.exports = {
   createUser,
   login,
@@ -47,4 +62,7 @@ module.exports = {
   changePassword,
   verifyEmail,
   updatePassword,
+  country,
+  state,
+  city,
 };

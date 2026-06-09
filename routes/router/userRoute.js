@@ -43,5 +43,8 @@ router.put(
   validateRequest(changePasswordSchema, "body"),
   userController.changePassword,
 );
+router.get("/listOfCountry", authenticateToken, userController.country);
+router.get("/listOfState/:countryId", authenticateToken, userController.state);
+router.get("/listOfCity/:stateId", authenticateToken, userController.city);
 
 module.exports = router;

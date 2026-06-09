@@ -1,6 +1,6 @@
 const UserRoute = require("./router/userRoute");
 
 module.exports = (app) => {
-  app.use("/api/users", UserRoute);
-  app.use("/common",UserRoute)
+  app.use("/api", UserRoute);
+  app.use("/common", UserRoute);
 };
