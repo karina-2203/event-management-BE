@@ -21,7 +21,7 @@ module.exports = {
   PASSWORD_UPDATE_SUCCESSFULLY: "Password updated successfully.",
   OTP_EXPIRE: "OTP has expired. Please request a new OTP.",
   INVALID_OTP: "Invalid OTP",
-  OTP_NOTFOUND: "OTP not found. Please request a new OTP.",
+  OTP_NOT_FOUND: "OTP not found. Please request a new OTP.",
   EMAIL_VERIFICATION: "Email Verification - OTP",
   FAIL_OTP: "Failed to send OTP email",
   CURRENT_PASSWORD: "Current password not matches",

@@ -197,7 +197,7 @@ const updatePassword = async (userData) => {
     return handleResponse(
       StatusCodes.BAD_REQUEST,
       responseData.ERROR,
-      message.OTP_NOTFOUND,
+      message.OTP_NOT_FOUND,
     );
   }
 
@@ -284,26 +284,18 @@ const changePassword = async (userId, passwordData) => {
 };
 
 const getCountry = async () => {
-  const countries = await country.find();
+  const FindCountry = await country.find();
 
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
     `Countries ${message.GET_SUCCESS}`,
-    countries,
+    FindCountry,
   );
 };
 
 const getState = async (req) => {
   const { countryId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(countryId)) {
-    return handleResponse(
-      StatusCodes.BAD_REQUEST,
-      responseData.ERROR,
-      message.INVALID_COUNTRY_ID,
-    );
-  }
 
   const countryExists = await country.findById(countryId);
   if (!countryExists) {
@@ -314,35 +306,20 @@ const getState = async (req) => {
     );
   }
 
-  const states = await state.find({
+  const FindState = await state.find({
     country_id: countryId,
   });
-
-  if (!states || states.length === 0) {
-    return handleResponse(
-      StatusCodes.OK,
-      responseData.SUCCESS,
-      message.NO_STATES_FOUND,
-    );
-  }
 
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
     `States ${message.GET_SUCCESS}`,
-    states,
+    FindState,
   );
 };
 
 const getCity = async (req) => {
   const { stateId } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(stateId)) {
-    return handleResponse(
-      StatusCodes.BAD_REQUEST,
-      responseData.ERROR,
-      message.INVALID_STATE_ID,
-    );
-  }
 
   const stateExists = await state.findById(stateId);
   if (!stateExists) {
@@ -353,23 +330,15 @@ const getCity = async (req) => {
     );
   }
 
-  const cities = await city.find({
+  const FindCity = await city.find({
     state_id: stateId,
   });
-
-  if (!cities || cities.length === 0) {
-    return handleResponse(
-      StatusCodes.OK,
-      responseData.SUCCESS,
-      message.NO_CITIES_FOUND,
-    );
-  }
 
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
     `Cities ${message.GET_SUCCESS}`,
-    cities,
+    FindCity,
   );
 };
 
