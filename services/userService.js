@@ -17,6 +17,11 @@ const {
 } = require("../libs/service/commonFunction");
 const sendMail = require("../libs/helpers/mail");
 const logger = require("../loggers/logger");
+const verifyEmailTemplatePath = path.join(
+  __dirname,
+  "../templates/verifyEmail.html",
+);
+const verifyEmailTemplate = fs.readFileSync(verifyEmailTemplatePath, "utf8");
 const mongoose = require("mongoose");
 
 const createUser = async (userData) => {
@@ -162,10 +167,7 @@ const verifyEmail = async (userData) => {
     { upsert: true, new: true },
   );
 
-  const templatePath = path.join(__dirname, "../templates/verifyEmail.html");
-  let htmlTemplate = fs.readFileSync(templatePath, "utf8");
-
-  htmlTemplate = htmlTemplate.replace("{{OTP}}", generatedOTP);
+  const htmlTemplate = verifyEmailTemplate.replace("{{OTP}}", generatedOTP);
 
   // Send email
   try {
