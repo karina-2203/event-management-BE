@@ -1,10 +1,19 @@
 const user = require("../models/user");
+const otp = require("../models/otp");
 const handleResponse = require("../libs/helpers/handleResponse");
 const { responseData } = require("../libs/utils/enums");
 const { StatusCodes } = require("http-status-codes");
 const message = require("../libs/utils/message");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
+const {
+  generateOTP,
+  calculateExpiryTime,
+} = require("../libs/service/commonFunction");
+const sendMail = require("../libs/helpers/mail");
+const logger = require("../loggers/logger");
 
 const createUser = async (userData) => {
   const existingUser = await user.findOne({ email: userData.email });
@@ -13,7 +22,7 @@ const createUser = async (userData) => {
     return handleResponse(
       StatusCodes.CONFLICT,
       responseData.ERROR,
-      message.EMAIL_ALREADY_EXIST
+      message.EMAIL_ALREADY_EXIST,
     );
   }
 
@@ -122,7 +131,151 @@ const updateProfile = async (userId, updateData) => {
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
-    `User ${message.UPDATE_SUCCESS}`
+    `User ${message.UPDATE_SUCCESS}`,
+  );
+};
+
+const verifyEmail = async (userData) => {
+  const existingUser = await user.findOne({ email: userData.email });
+
+  if (!existingUser) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.USER_NOT_FOUND,
+    );
+  }
+
+  const generatedOTP = generateOTP();
+  const expiryTime = calculateExpiryTime();
+
+  await otp.findOneAndUpdate(
+    { email: userData.email },
+    {
+      otp: generatedOTP,
+      expire_time: expiryTime,
+    },
+    { upsert: true, new: true },
+  );
+
+  const templatePath = path.join(__dirname, "../templates/verifyEmail.html");
+  let htmlTemplate = fs.readFileSync(templatePath, "utf8");
+
+  htmlTemplate = htmlTemplate.replace("{{OTP}}", generatedOTP);
+
+  // Send email
+  try {
+    await sendMail(userData.email, message.EMAIL_VERIFICATION, htmlTemplate);
+  } catch (error) {
+    logger.error(error);
+  }
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    message.OTP_SUCCESS,
+  );
+};
+
+const updatePassword = async (userData) => {
+  const existingUser = await user.findOne({ email: userData.email });
+
+  if (!existingUser) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.USER_NOT_FOUND,
+    );
+  }
+
+  const otpRecord = await otp.findOne({ email: userData.email });
+
+  if (!otpRecord) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.OTP_NOTFOUND,
+    );
+  }
+
+  if (otpRecord.otp !== userData.otp) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.INVALID_OTP,
+    );
+  }
+
+  if (new Date() > otpRecord.expire_time) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.OTP_EXPIRE,
+    );
+  }
+
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(userData.newPassword, saltRounds);
+
+  existingUser.password = hashedPassword;
+  await existingUser.save();
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    message.PASSWORD_UPDATE_SUCCESSFULLY,
+  );
+};
+
+const changePassword = async (userId, passwordData) => {
+  const userRecord = await user.findById(userId);
+
+  if (!userRecord) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.USER_NOT_FOUND,
+    );
+  }
+
+  const isCurrentPasswordValid = await bcrypt.compare(
+    passwordData.currentPassword,
+    userRecord.password,
+  );
+
+  if (!isCurrentPasswordValid) {
+    return handleResponse(
+      StatusCodes.UNAUTHORIZED,
+      responseData.ERROR,
+      message.CURRENT_PASSWORD,
+    );
+  }
+
+  const isSameAsOld = await bcrypt.compare(
+    passwordData.newPassword,
+    userRecord.password,
+  );
+
+  if (isSameAsOld) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.NEW_PASSWORD_NOT_MATCHES_CURRENT,
+    );
+  }
+
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(
+    passwordData.newPassword,
+    saltRounds,
+  );
+
+  userRecord.password = hashedPassword;
+  await userRecord.save();
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    message.PASSWORD_UPDATE_SUCCESSFULLY,
   );
 };
 
@@ -130,5 +283,8 @@ module.exports = {
   createUser,
   login,
   getProfile,
-  updateProfile
+  updateProfile,
+  changePassword,
+  verifyEmail,
+  updatePassword,
 };

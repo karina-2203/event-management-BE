@@ -17,4 +17,14 @@ module.exports = {
   ACCESS_TOKEN_REQUIRED: "Access token is required",
   INVALID_TOKEN: "Invalid or expired token",
   ERROR_AUTHENTICATING_USER: "Error authenticating user",
+  OTP_SUCCESS: "OTP sent successfully",
+  PASSWORD_UPDATE_SUCCESSFULLY: "Password updated successfully.",
+  OTP_EXPIRE: "OTP has expired. Please request a new OTP.",
+  INVALID_OTP: "Invalid OTP",
+  OTP_NOTFOUND: "OTP not found. Please request a new OTP.",
+  EMAIL_VERIFICATION: "Email Verification - OTP",
+  FAIL_OTP: "Failed to send OTP email",
+  CURRENT_PASSWORD: "Current password not matches",
+  NEW_PASSWORD_NOT_MATCHES_CURRENT:
+    "New password and current password should not be the same",
 };
