@@ -166,19 +166,14 @@ const verifyEmail = async (userData) => {
   // Send email
   try {
     await sendMail(userData.email, message.EMAIL_VERIFICATION, htmlTemplate);
-
-    return handleResponse(
-      StatusCodes.OK,
-      responseData.SUCCESS,
-      message.OTP_SUCCESS,
-    );
   } catch (error) {
-    return handleResponse(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      responseData.ERROR,
-      message.FAIL_OTP,
-    );
+    logger.error(error);
   }
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    message.OTP_SUCCESS,
+  );
 };
 
 const updatePassword = async (userData) => {
