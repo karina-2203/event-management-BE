@@ -16,7 +16,7 @@ const eventSchema = Joi.object({
 });
 
 const updateEventSchema = Joi.object({
-  event_manage_id: Joi.string().required().messages({
+  event_id: Joi.string().required().messages({
     "string.empty": "Event ID is don't empty field",
     "any.required": "Event ID is required",
   }),

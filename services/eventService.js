@@ -43,9 +43,9 @@ const getEvent = async (id) => {
 };
 
 const editEvent = async (eventData) => {
-  const { event_manage_id, ...updateData } = eventData;
+  const { event_id, ...updateData } = eventData;
 
-  if (!event_manage_id) {
+  if (!event_id) {
     return handleResponse(
       StatusCodes.BAD_REQUEST,
       responseData.FAILED,
@@ -53,7 +53,7 @@ const editEvent = async (eventData) => {
     );
   }
 
-  const eventId = new mongoose.Types.ObjectId(event_manage_id);
+  const eventId = new mongoose.Types.ObjectId(event_id);
 
   const updatedEvent = await event.findByIdAndUpdate(eventId, updateData, {
     new: true,

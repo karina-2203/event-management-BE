@@ -201,9 +201,9 @@ const editEventPath = {
           "application/json": {
             schema: {
               type: "object",
-              required: ["event_manage_id"],
+              required: ["event_id"],
               properties: {
-                event_manage_id: {
+                event_id: {
                   type: "string",
                   example: "6a29062372d3530f311a1fc4",
                   description: "MongoDB ObjectId of the event to update",
