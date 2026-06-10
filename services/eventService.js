@@ -49,7 +49,7 @@ const editEvent = async (eventData) => {
     return handleResponse(
       StatusCodes.BAD_REQUEST,
       responseData.FAILED,
-      "Event ID is required",
+      message.EVENT_ID_REQUIRED,
     );
   }
 
