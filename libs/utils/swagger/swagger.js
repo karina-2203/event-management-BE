@@ -16,6 +16,15 @@ const {
   listOfCityPath,
 } = require("./user.swagger");
 
+const {
+  eventTag,
+  addEventPath,
+  viewEventPath,
+  editEventPath,
+  deleteEventPath,
+  listOfEventPath,
+} = require("./event.swagger");
+
 // Add new module swagger imports here as the project grows:
 // const { authTag, loginPath } = require("./auth.swagger");
 
@@ -35,6 +44,7 @@ const options = {
     ],
     tags: [
       userTag,
+      eventTag,
       // authTag,
     ],
     paths: {
@@ -49,6 +59,11 @@ const options = {
       ...listOfCountryPath,
       ...listOfStatePath,
       ...listOfCityPath,
+      ...addEventPath,
+      ...viewEventPath,
+      ...editEventPath,
+      ...deleteEventPath,
+      ...listOfEventPath,
     },
     components: {
       securitySchemes: {
