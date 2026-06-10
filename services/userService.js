@@ -1,3 +1,6 @@
+const city = require("../models/city");
+const state = require("../models/states");
+const country = require("../models/countries");
 const user = require("../models/user");
 const otp = require("../models/otp");
 const handleResponse = require("../libs/helpers/handleResponse");
@@ -14,6 +17,12 @@ const {
 } = require("../libs/service/commonFunction");
 const sendMail = require("../libs/helpers/mail");
 const logger = require("../loggers/logger");
+const verifyEmailTemplatePath = path.join(
+  __dirname,
+  "../templates/verifyEmail.html",
+);
+const verifyEmailTemplate = fs.readFileSync(verifyEmailTemplatePath, "utf8");
+const mongoose = require("mongoose");
 
 const createUser = async (userData) => {
   const existingUser = await user.findOne({ email: userData.email });
@@ -158,10 +167,7 @@ const verifyEmail = async (userData) => {
     { upsert: true, new: true },
   );
 
-  const templatePath = path.join(__dirname, "../templates/verifyEmail.html");
-  let htmlTemplate = fs.readFileSync(templatePath, "utf8");
-
-  htmlTemplate = htmlTemplate.replace("{{OTP}}", generatedOTP);
+  const htmlTemplate = verifyEmailTemplate.replace("{{OTP}}", generatedOTP);
 
   // Send email
   try {
@@ -193,7 +199,7 @@ const updatePassword = async (userData) => {
     return handleResponse(
       StatusCodes.BAD_REQUEST,
       responseData.ERROR,
-      message.OTP_NOTFOUND,
+      message.OTP_NOT_FOUND,
     );
   }
 
@@ -279,6 +285,65 @@ const changePassword = async (userId, passwordData) => {
   );
 };
 
+const getCountry = async () => {
+  const FindCountry = await country.find();
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `Countries ${message.GET_SUCCESS}`,
+    FindCountry,
+  );
+};
+
+const getState = async (req) => {
+  const { countryId } = req.params;
+
+  const countryExists = await country.findById(countryId);
+  if (!countryExists) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.COUNTRY_NOT_FOUND,
+    );
+  }
+
+  const FindState = await state.find({
+    country_id: countryId,
+  });
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `States ${message.GET_SUCCESS}`,
+    FindState,
+  );
+};
+
+const getCity = async (req) => {
+  const { stateId } = req.params;
+
+  const stateExists = await state.findById(stateId);
+  if (!stateExists) {
+    return handleResponse(
+      StatusCodes.NOT_FOUND,
+      responseData.ERROR,
+      message.STATE_NOT_FOUND,
+    );
+  }
+
+  const FindCity = await city.find({
+    state_id: stateId,
+  });
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `Cities ${message.GET_SUCCESS}`,
+    FindCity,
+  );
+};
+
 module.exports = {
   createUser,
   login,
@@ -287,4 +352,7 @@ module.exports = {
   changePassword,
   verifyEmail,
   updatePassword,
+  getCountry,
+  getState,
+  getCity,
 };

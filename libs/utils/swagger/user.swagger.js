@@ -8,7 +8,7 @@ const userTag = {
 };
 
 const createUserPath = {
-  "/api/users/create": {
+  "/api/create": {
     post: {
       summary: "Create a new user",
       tags: ["Users"],
@@ -76,7 +76,7 @@ const createUserPath = {
 };
 
 const loginPath = {
-  "/api/users/login": {
+  "/api/login": {
     post: {
       summary: "User login",
       tags: ["Users"],
@@ -225,7 +225,7 @@ const fileUploadPath = {
 };
 
 const getProfilePath = {
-  "/api/users/viewProfile": {
+  "/api/viewProfile": {
     get: {
       summary: "Get user profile",
       tags: ["Users"],
@@ -308,7 +308,7 @@ const getProfilePath = {
 };
 
 const updateProfilePath = {
-  "/api/users/editProfile": {
+  "/api/editProfile": {
     put: {
       summary: "Update user profile",
       tags: ["Users"],
@@ -425,7 +425,7 @@ const updateProfilePath = {
 };
 
 const verifyEmailPath = {
-  "/api/users/verifyEmail": {
+  "/api/verifyEmail": {
     post: {
       summary: "verify Email",
       tags: ["Users"],
@@ -457,7 +457,7 @@ const verifyEmailPath = {
 };
 
 const updatePasswordPath = {
-  "/api/users/updatePassword": {
+  "/api/updatePassword": {
     put: {
       summary: "Update password using OTP",
       tags: ["Users"],
@@ -544,7 +544,7 @@ const updatePasswordPath = {
 };
 
 const changePasswordPath = {
-  "/api/users/changePassword": {
+  "/api/changePassword": {
     put: {
       summary: "Change password for authenticated user",
       tags: ["Users"],
@@ -628,6 +628,153 @@ const changePasswordPath = {
   },
 };
 
+const listOfCountryPath = {
+  "/api/listOfCountry": {
+    get: {
+      summary: "Get list of all countries",
+      tags: ["Users"],
+      description: "Retrieve all available countries",
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      responses: {
+        200: {
+          description: "Countries retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Countries get successfully",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+const listOfStatePath = {
+  "/api/listOfState/{countryId}": {
+    get: {
+      summary: "Get list of states by country",
+      tags: ["Users"],
+      description: "Retrieve all states for a specific country",
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      parameters: [
+        {
+          name: "countryId",
+          in: "path",
+          required: true,
+          description: "MongoDB ObjectId of the country",
+          schema: {
+            type: "string",
+            example: "507f1f77bcf86cd799439011",
+          },
+        },
+      ],
+      responses: {
+        200: {
+          description: "States retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "States get successfully",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+const listOfCityPath = {
+  "/api/listOfCity/{stateId}": {
+    get: {
+      summary: "Get list of cities by state",
+      tags: ["Users"],
+      description: "Retrieve all cities for a specific state",
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      parameters: [
+        {
+          name: "stateId",
+          in: "path",
+          required: true,
+          description: "MongoDB ObjectId of the state",
+          schema: {
+            type: "string",
+            example: "507f1f77bcf86cd799439012",
+          },
+        },
+      ],
+      responses: {
+        200: {
+          description: "Cities retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "SUCCESS",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Cities get successfully",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
 module.exports = {
   userTag,
   createUserPath,
@@ -638,4 +785,7 @@ module.exports = {
   verifyEmailPath,
   updatePasswordPath,
   changePasswordPath,
+  listOfCountryPath,
+  listOfStatePath,
+  listOfCityPath,
 };

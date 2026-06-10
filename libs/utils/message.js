@@ -21,10 +21,16 @@ module.exports = {
   PASSWORD_UPDATE_SUCCESSFULLY: "Password updated successfully.",
   OTP_EXPIRE: "OTP has expired. Please request a new OTP.",
   INVALID_OTP: "Invalid OTP",
-  OTP_NOTFOUND: "OTP not found. Please request a new OTP.",
+  OTP_NOT_FOUND: "OTP not found. Please request a new OTP.",
   EMAIL_VERIFICATION: "Email Verification - OTP",
   FAIL_OTP: "Failed to send OTP email",
   CURRENT_PASSWORD: "Current password not matches",
   NEW_PASSWORD_NOT_MATCHES_CURRENT:
     "New password and current password should not be the same",
+  COUNTRY_NOT_FOUND: "Country not found",
+  INVALID_COUNTRY_ID: "Invalid country ID format",
+  STATE_NOT_FOUND: "State not found",
+  INVALID_STATE_ID: "Invalid state ID format",
+  NO_STATES_FOUND: "No states found for this country",
+  NO_CITIES_FOUND: "No cities found for this state",
 };
