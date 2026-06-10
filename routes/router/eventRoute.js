@@ -5,6 +5,7 @@ const { validateRequest } = require("../../libs/helpers/validator");
 const {
   eventSchema,
   updateEventSchema,
+  listEventSchema,
 } = require("../../validations/serviceValidation");
 const { authenticateToken } = require("../../libs/service/authentication/auth");
 
@@ -26,6 +27,11 @@ router.delete(
   authenticateToken,
   eventController.deleteEvent,
 );
-router.get("/listOfEvent", authenticateToken, eventController.listEvent);
+router.get(
+  "/listOfEvent",
+  authenticateToken,
+  validateRequest(listEventSchema, "query"),
+  eventController.listEvent,
+);
 
 module.exports = router;

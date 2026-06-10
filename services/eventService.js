@@ -93,14 +93,41 @@ const deleteEvent = async (id) => {
   );
 };
 
-const listEvent = async () => {
-  const listAllEvents = await event.find();
+const listEvent = async (payload) => {
+  const { search, page = 1, limit = 10, sortOrder = "asc" } = payload || {};
+
+  let filter = {};
+  if (search) {
+    filter = {
+      event_name: { $regex: search, $options: "i" },
+    };
+  }
+
+  const skip = (page - 1) * limit;
+
+  const sort = { event_name: sortOrder === "desc" ? -1 : 1 };
+
+  const listAllEvents = await event
+    .find(filter)
+    .limit(parseInt(limit))
+    .skip(skip)
+    .sort(sort);
+
+  const totalEvents = await event.countDocuments(filter);
 
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
     `Event ${message.GET_SUCCESS}`,
-    listAllEvents,
+    {
+      events: listAllEvents,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalEvents / limit),
+        totalEvents,
+        limit: parseInt(limit),
+      },
+    },
   );
 };
 

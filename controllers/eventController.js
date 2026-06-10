@@ -23,8 +23,8 @@ const deleteEvent = async (req, res) => {
   return res.status(StatusCodes.OK).json(responseData);
 };
 
-const listEvent = async (_req, res) => {
-  const responseData = await eventService.listEvent();
+const listEvent = async (req, res) => {
+  const responseData = await eventService.listEvent(req.body);
   return res.status(StatusCodes.OK).json(responseData);
 };
 
