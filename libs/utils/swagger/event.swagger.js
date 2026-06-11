@@ -12,6 +12,8 @@ const addEventPath = {
     post: {
       summary: "Create a new event",
       tags: ["Events"],
+      description:
+        "Creates a new event. User ID is automatically taken from the authentication token.",
       security: [
         {
           bearerAuth: [],
@@ -23,22 +25,28 @@ const addEventPath = {
           "application/json": {
             schema: {
               type: "object",
-              required: ["user_id", "event_name", "event_description"],
+              required: ["event_name", "event_description"],
               properties: {
-                user_id: {
-                  type: "string",
-                  example: "6a22a4491fdb2e72188de3a5",
-                  description: "MongoDB ObjectId of the user creating the event",
-                },
                 event_name: {
                   type: "string",
-                  example: "sangeet",
+                  example: "Wedding Ceremony",
                   description: "Name of the event",
                 },
                 event_description: {
                   type: "string",
-                  example: "sangeet ceremony",
+                  example: "Grand wedding celebration",
                   description: "Description of the event",
+                },
+                event_image: {
+                  type: "array",
+                  items: {
+                    type: "string",
+                  },
+                  example: [
+                    "file-1781161469640-761494847.png",
+                    "file-1781161469641-761494848.png",
+                  ],
+                  description: "Array of uploaded image filenames (optional)",
                 },
               },
             },
@@ -63,7 +71,7 @@ const addEventPath = {
                   },
                   message: {
                     type: "string",
-                    example: "Event added successfully",
+                    example: "Event added successfully.",
                   },
                   data: {
                     type: "object",
@@ -154,6 +162,17 @@ const viewEventPath = {
                         type: "string",
                         example: "sangeet ceremony",
                       },
+                      event_image: {
+                        type: "array",
+                        items: {
+                          type: "string",
+                        },
+                        example: [
+                          "file-1781161469640-761494847.png",
+                          "file-1781161469641-761494848.png",
+                        ],
+                        description: "Array of event image filenames",
+                      },
                       createdAt: {
                         type: "string",
                         format: "date-time",
@@ -190,6 +209,8 @@ const editEventPath = {
     put: {
       summary: "Update an existing event",
       tags: ["Events"],
+      description:
+        "Updates an event. User ID is automatically taken from the authentication token. When adding new images, they will be appended to existing images.",
       security: [
         {
           bearerAuth: [],
@@ -210,13 +231,22 @@ const editEventPath = {
                 },
                 event_name: {
                   type: "string",
-                  example: "sangeet2.0",
+                  example: "Updated Wedding Ceremony",
                   description: "Updated event name (optional)",
                 },
                 event_description: {
                   type: "string",
-                  example: "Updated sangeet ceremony",
+                  example: "Updated grand wedding celebration",
                   description: "Updated event description (optional)",
+                },
+                event_image: {
+                  type: "array",
+                  items: {
+                    type: "string",
+                  },
+                  example: ["file-1781161469642-761494849.png"],
+                  description:
+                    "Array of new image filenames to add (optional). New images will be appended to existing images, not replaced.",
                 },
               },
             },
@@ -237,11 +267,11 @@ const editEventPath = {
                   },
                   status: {
                     type: "string",
-                    example: "SUCCESS",
+                    example: "success",
                   },
                   message: {
                     type: "string",
-                    example: "Event updated successfully",
+                    example: "Event updated successfully.",
                   },
                 },
               },
@@ -249,7 +279,7 @@ const editEventPath = {
           },
         },
         400: {
-          description: "Validation error",
+          description: "Validation error or event_id required",
         },
         404: {
           description: "Event not found",
@@ -428,6 +458,14 @@ const listOfEventPath = {
                             event_description: {
                               type: "string",
                               example: "sangeet ceremony",
+                            },
+                            event_image: {
+                              type: "array",
+                              items: {
+                                type: "string",
+                              },
+                              example: ["file-1781161469640-761494847.png"],
+                              description: "Array of event image filenames",
                             },
                             createdAt: {
                               type: "string",
