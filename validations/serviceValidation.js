@@ -1,10 +1,6 @@
 const Joi = require("joi");
 
 const eventSchema = Joi.object({
-  user_id: Joi.string().required().messages({
-    "string.empty": "User ID is don't empty field",
-    "any.required": "User ID is required",
-  }),
   event_name: Joi.string().required().messages({
     "string.empty": "Event name is don't empty field",
     "any.required": "Event name is required",
@@ -12,6 +8,9 @@ const eventSchema = Joi.object({
   event_description: Joi.string().required().messages({
     "string.empty": "Event description is don't empty field",
     "any.required": "Event description is required",
+  }),
+  event_image: Joi.array().items(Joi.string()).optional().messages({
+    "array.base": "Event image must be an array",
   }),
 });
 
@@ -25,6 +24,9 @@ const updateEventSchema = Joi.object({
   }),
   event_description: Joi.string().optional().messages({
     "string.empty": "Event description is don't empty field",
+  }),
+  event_image: Joi.array().items(Joi.string()).optional().messages({
+    "array.base": "Event image must be an array",
   }),
 });
 

@@ -5,10 +5,11 @@ const handleResponse = require("../libs/helpers/handleResponse");
 const { StatusCodes } = require("http-status-codes");
 const { responseData } = require("../libs/utils/enums");
 
-const createEvent = async (serviceData) => {
-  if (serviceData.user_id) {
-    serviceData.user_id = new mongoose.Types.ObjectId(serviceData.user_id);
-  }
+const createEvent = async (userId, eventData) => {
+  const serviceData = {
+    ...eventData,
+    user_id: new mongoose.Types.ObjectId(userId),
+  };
 
   const createdEvent = await event.create(serviceData);
 
@@ -42,7 +43,7 @@ const getEvent = async (id) => {
   );
 };
 
-const editEvent = async (eventData) => {
+const editEvent = async (userId, eventData) => {
   const { event_id, ...updateData } = eventData;
 
   if (!event_id) {
@@ -55,17 +56,31 @@ const editEvent = async (eventData) => {
 
   const eventId = new mongoose.Types.ObjectId(event_id);
 
-  const updatedEvent = await event.findByIdAndUpdate(eventId, updateData, {
-    new: true,
-  });
+  const currentEvent = await event.findById(eventId);
 
-  if (!updatedEvent) {
+  if (!currentEvent) {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.FAILED,
       `Event ${message.NOT_FOUND}`,
     );
   }
+
+  if (updateData.event_image && Array.isArray(updateData.event_image)) {
+    const existingImages = currentEvent.event_image || [];
+    updateData.event_image = [
+      ...new Set([...existingImages, ...updateData.event_image]),
+    ];
+  }
+
+  const updateEventData = {
+    ...updateData,
+    user_id: new mongoose.Types.ObjectId(userId),
+  };
+
+  const updatedEvent = await event.findByIdAndUpdate(eventId, updateEventData, {
+    new: true,
+  });
 
   return handleResponse(
     StatusCodes.OK,

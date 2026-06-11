@@ -2,7 +2,8 @@ const { StatusCodes } = require("http-status-codes");
 const eventService = require("../services/eventService");
 
 const createEvent = async (req, res) => {
-  const responseData = await eventService.createEvent(req.body);
+  const userId = req.user._id;
+  const responseData = await eventService.createEvent(userId, req.body);
   return res.status(StatusCodes.CREATED).json(responseData);
 };
 
@@ -13,7 +14,8 @@ const getEvent = async (req, res) => {
 };
 
 const editEvent = async (req, res) => {
-  const responseData = await eventService.editEvent(req.body);
+  const userId = req.user._id;
+  const responseData = await eventService.editEvent(userId, req.body);
   return res.status(StatusCodes.OK).json(responseData);
 };
 
