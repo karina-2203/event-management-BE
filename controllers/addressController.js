@@ -25,9 +25,15 @@ const deleteAddress = async (req, res) => {
   return res.status(StatusCodes.OK).json(responseData);
 };
 
+const listAddress = async (req, res) => {
+  const responseData = await addressService.listAddress(req.body);
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
 module.exports = {
   addAddress,
   viewAddress,
   editAddress,
   deleteAddress,
+  listAddress,
 };

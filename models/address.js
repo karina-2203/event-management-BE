@@ -10,17 +10,17 @@ const addressSchema = new mongoose.Schema(
     },
     country_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "country",
+      ref: "countries",
       required: true,
     },
     state_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "state",
+      ref: "states",
       required: true,
     },
     city_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "city",
+      ref: "cities",
       required: true,
     },
     address_line1: {
@@ -33,6 +33,10 @@ const addressSchema = new mongoose.Schema(
     zip_code: {
       type: Number,
       required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
