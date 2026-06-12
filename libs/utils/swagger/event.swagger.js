@@ -106,6 +106,7 @@ const viewEventPath = {
     get: {
       summary: "Get event by ID",
       tags: ["Events"],
+      description: "Retrieves a single event by ID. Only non-deleted events (isDeleted: false) can be retrieved.",
       security: [
         {
           bearerAuth: [],
@@ -173,6 +174,11 @@ const viewEventPath = {
                         ],
                         description: "Array of event image filenames",
                       },
+                      isDeleted: {
+                        type: "boolean",
+                        example: false,
+                        description: "Soft delete flag - always false for retrieved events",
+                      },
                       createdAt: {
                         type: "string",
                         format: "date-time",
@@ -191,7 +197,7 @@ const viewEventPath = {
           },
         },
         404: {
-          description: "Event not found",
+          description: "Event not found or already deleted (isDeleted: true)",
         },
         401: {
           description: "Unauthorized - Invalid or missing token",
@@ -210,7 +216,7 @@ const editEventPath = {
       summary: "Update an existing event",
       tags: ["Events"],
       description:
-        "Updates an event. User ID is automatically taken from the authentication token. When adding new images, they will be appended to existing images.",
+        "Updates a non-deleted event. User ID is automatically taken from the authentication token. When adding new images, they will be appended to existing images. Only events with isDeleted: false can be updated.",
       security: [
         {
           bearerAuth: [],
@@ -282,7 +288,7 @@ const editEventPath = {
           description: "Validation error or event_id required",
         },
         404: {
-          description: "Event not found",
+          description: "Event not found or already deleted (isDeleted: true)",
         },
         401: {
           description: "Unauthorized - Invalid or missing token",
@@ -300,6 +306,8 @@ const deleteEventPath = {
     delete: {
       summary: "Delete an event",
       tags: ["Events"],
+      description:
+        "Performs a soft delete by setting isDeleted flag to true. The event remains in the database but won't appear in listings or be retrievable.",
       security: [
         {
           bearerAuth: [],
@@ -310,7 +318,7 @@ const deleteEventPath = {
           name: "id",
           in: "path",
           required: true,
-          description: "MongoDB ObjectId of the event to delete",
+          description: "MongoDB ObjectId of the event to soft delete",
           schema: {
             type: "string",
             example: "6a29062372d3530f311a1fc4",
@@ -343,7 +351,7 @@ const deleteEventPath = {
           },
         },
         404: {
-          description: "Event not found",
+          description: "Event not found or already deleted",
         },
         401: {
           description: "Unauthorized - Invalid or missing token",
@@ -362,7 +370,7 @@ const listOfEventPath = {
       summary: "Get list of events with search and pagination",
       tags: ["Events"],
       description:
-        "Retrieves a paginated list of events with optional search and sorting. All parameters are optional.",
+        "Retrieves a paginated list of non-deleted events (isDeleted: false) with optional search and sorting. All parameters are optional.",
       security: [
         {
           bearerAuth: [],
@@ -458,6 +466,11 @@ const listOfEventPath = {
                               },
                               example: ["file-1781161469640-761494847.png"],
                               description: "Array of event image filenames",
+                            },
+                            isDeleted: {
+                              type: "boolean",
+                              example: false,
+                              description: "Soft delete flag - always false in list results",
                             },
                             createdAt: {
                               type: "string",
