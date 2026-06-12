@@ -358,63 +358,55 @@ const deleteEventPath = {
 
 const listOfEventPath = {
   "/api/eventMange/listOfEvent": {
-    get: {
+    post: {
       summary: "Get list of events with search and pagination",
       tags: ["Events"],
+      description:
+        "Retrieves a paginated list of events with optional search and sorting. All parameters are optional.",
       security: [
         {
           bearerAuth: [],
         },
       ],
-      parameters: [
-        {
-          name: "search",
-          in: "query",
-          required: false,
-          description: "Search term for event name (case-insensitive)",
-          schema: {
-            type: "string",
-            example: "sangeet",
+      requestBody: {
+        required: false,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                search: {
+                  type: "string",
+                  example: "sangeet",
+                  description: "Search term for event name (case-insensitive)",
+                },
+                page: {
+                  type: "integer",
+                  minimum: 1,
+                  default: 1,
+                  example: 1,
+                  description: "Page number for pagination",
+                },
+                limit: {
+                  type: "integer",
+                  minimum: 1,
+                  maximum: 100,
+                  default: 10,
+                  example: 10,
+                  description: "Number of events per page",
+                },
+                sortOrder: {
+                  type: "string",
+                  enum: ["asc", "desc"],
+                  default: "asc",
+                  example: "asc",
+                  description: "Sort order for event name",
+                },
+              },
+            },
           },
         },
-        {
-          name: "page",
-          in: "query",
-          required: false,
-          description: "Page number for pagination",
-          schema: {
-            type: "integer",
-            minimum: 1,
-            default: 1,
-            example: 1,
-          },
-        },
-        {
-          name: "limit",
-          in: "query",
-          required: false,
-          description: "Number of events per page",
-          schema: {
-            type: "integer",
-            minimum: 1,
-            maximum: 100,
-            default: 10,
-            example: 10,
-          },
-        },
-        {
-          name: "sortOrder",
-          in: "query",
-          required: false,
-          description: "Sort order for event name",
-          schema: {
-            type: "string",
-            enum: ["asc", "desc"],
-            default: "asc",
-            example: "asc",
-          },
-        },
-      ],
+      },
       responses: {
         200: {
           description: "Events retrieved successfully",
@@ -562,16 +554,6 @@ const listOfDropdownEventsPath = {
       },
     },
   },
-};
-
-module.exports = {
-  eventTag,
-  addEventPath,
-  viewEventPath,
-  editEventPath,
-  deleteEventPath,
-  listOfEventPath,
-  listOfDropdownEventsPath,
 };
 
 module.exports = {

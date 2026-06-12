@@ -38,11 +38,6 @@ const updateServiceSchema = Joi.object({
   }),
 });
 
-module.exports = {
-  serviceSchema,
-  updateServiceSchema,
-};
-
 const listServiceSchema = Joi.object({
   search: Joi.string().optional().allow("").messages({
     "string.base": "Search must be a string",

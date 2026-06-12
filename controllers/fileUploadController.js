@@ -3,7 +3,9 @@ const fileUploadService = require("../services/fileUploadService");
 const upload = require("../libs/helpers/multer");
 
 const fileUpload = async (req, res) => {
-  const responseData = await fileUploadService.fileUpload(req.file);
+  const responseData = await fileUploadService.fileUpload(
+    req.files || req.file,
+  );
   return res
     .status(responseData.statusCode || StatusCodes.OK)
     .json(responseData);
@@ -11,7 +13,10 @@ const fileUpload = async (req, res) => {
 
 const handleMulterError = async (err, req, res, next) => {
   if (err) {
-    const responseData = await fileUploadService.fileUpload(req.file, err);
+    const responseData = await fileUploadService.fileUpload(
+      req.files || req.file,
+      err,
+    );
     return res
       .status(responseData.statusCode || StatusCodes.BAD_REQUEST)
       .json(responseData);
@@ -21,5 +26,5 @@ const handleMulterError = async (err, req, res, next) => {
 };
 
 module.exports = {
-  fileUpload: [upload.single("file"), handleMulterError, fileUpload],
+  fileUpload: [upload.array("file", 5), handleMulterError, fileUpload],
 };
