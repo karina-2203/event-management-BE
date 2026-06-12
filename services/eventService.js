@@ -25,7 +25,7 @@ const createEvent = async (userId, eventData) => {
 
 const getEvent = async (id) => {
   const eventId = new mongoose.Types.ObjectId(id);
-  const eventData = await event.findById(eventId);
+  const eventData = await event.findOne({ _id: eventId, isDeleted: false });
 
   if (!eventData) {
     return handleResponse(
@@ -56,7 +56,7 @@ const editEvent = async (userId, eventData) => {
 
   const eventId = new mongoose.Types.ObjectId(event_id);
 
-  const currentEvent = await event.findById(eventId);
+  const currentEvent = await event.findOne({ _id: eventId, isDeleted: false });
 
   if (!currentEvent) {
     return handleResponse(
@@ -78,7 +78,7 @@ const editEvent = async (userId, eventData) => {
     user_id: new mongoose.Types.ObjectId(userId),
   };
 
-  const updatedEvent = await event.findByIdAndUpdate(eventId, updateEventData, {
+  await event.findByIdAndUpdate(eventId, updateEventData, {
     new: true,
   });
 
@@ -91,7 +91,15 @@ const editEvent = async (userId, eventData) => {
 
 const deleteEvent = async (id) => {
   const eventId = new mongoose.Types.ObjectId(id);
-  const deletedEvent = await event.findByIdAndDelete(eventId);
+  const deletedEvent = await event.findByIdAndUpdate(
+    eventId,
+    {
+      isDeleted: true,
+    },
+    {
+      new: true,
+    },
+  );
 
   if (!deletedEvent) {
     return handleResponse(
@@ -111,11 +119,9 @@ const deleteEvent = async (id) => {
 const listEvent = async (payload) => {
   const { search, page = 1, limit = 10, sortOrder = "asc" } = payload || {};
 
-  let filter = {};
+  let filter = { isDeleted: false };
   if (search) {
-    filter = {
-      event_name: { $regex: search, $options: "i" },
-    };
+    filter.event_name = { $regex: search, $options: "i" };
   }
 
   const skip = (page - 1) * limit;

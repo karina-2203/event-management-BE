@@ -21,6 +21,10 @@ const eventSchema = new mongoose.Schema(
         required: false,
       },
     ],
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
