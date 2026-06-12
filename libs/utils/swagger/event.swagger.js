@@ -106,6 +106,7 @@ const viewEventPath = {
     get: {
       summary: "Get event by ID",
       tags: ["Events"],
+      description: "Retrieves a single event by ID. Only non-deleted events (isDeleted: false) can be retrieved.",
       security: [
         {
           bearerAuth: [],
@@ -176,7 +177,7 @@ const viewEventPath = {
                       isDeleted: {
                         type: "boolean",
                         example: false,
-                        description: "Soft delete flag",
+                        description: "Soft delete flag - always false for retrieved events",
                       },
                       createdAt: {
                         type: "string",
@@ -196,7 +197,7 @@ const viewEventPath = {
           },
         },
         404: {
-          description: "Event not found",
+          description: "Event not found or already deleted (isDeleted: true)",
         },
         401: {
           description: "Unauthorized - Invalid or missing token",
@@ -215,7 +216,7 @@ const editEventPath = {
       summary: "Update an existing event",
       tags: ["Events"],
       description:
-        "Updates an event. User ID is automatically taken from the authentication token. When adding new images, they will be appended to existing images.",
+        "Updates a non-deleted event. User ID is automatically taken from the authentication token. When adding new images, they will be appended to existing images. Only events with isDeleted: false can be updated.",
       security: [
         {
           bearerAuth: [],
@@ -287,7 +288,7 @@ const editEventPath = {
           description: "Validation error or event_id required",
         },
         404: {
-          description: "Event not found",
+          description: "Event not found or already deleted (isDeleted: true)",
         },
         401: {
           description: "Unauthorized - Invalid or missing token",
@@ -306,7 +307,7 @@ const deleteEventPath = {
       summary: "Soft delete an event",
       tags: ["Events"],
       description:
-        "Performs a soft delete by setting isDeleted flag to true. The event remains in the database but won't appear in listings.",
+        "Performs a soft delete by setting isDeleted flag to true. The event remains in the database but won't appear in listings or be retrievable.",
       security: [
         {
           bearerAuth: [],
@@ -350,7 +351,7 @@ const deleteEventPath = {
           },
         },
         404: {
-          description: "Event not found",
+          description: "Event not found or already deleted",
         },
         401: {
           description: "Unauthorized - Invalid or missing token",
@@ -369,7 +370,7 @@ const listOfEventPath = {
       summary: "Get list of events with search and pagination",
       tags: ["Events"],
       description:
-        "Retrieves a paginated list of non-deleted events with optional search and sorting. All parameters are optional. Only events where isDeleted is false are returned.",
+        "Retrieves a paginated list of non-deleted events (isDeleted: false) with optional search and sorting. All parameters are optional.",
       security: [
         {
           bearerAuth: [],
@@ -469,7 +470,7 @@ const listOfEventPath = {
                             isDeleted: {
                               type: "boolean",
                               example: false,
-                              description: "Soft delete flag",
+                              description: "Soft delete flag - always false in list results",
                             },
                             createdAt: {
                               type: "string",
