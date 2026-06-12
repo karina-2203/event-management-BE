@@ -25,7 +25,10 @@ const createService = async (userId, serviceData) => {
 
 const getService = async (id) => {
   const serviceId = new mongoose.Types.ObjectId(id);
-  const serviceData = await service.findById(serviceId);
+  const serviceData = await service.findOne({
+    _id: serviceId,
+    isDeleted: false,
+  });
   if (!serviceData) {
     return handleResponse(
       StatusCodes.NOT_FOUND,
@@ -83,7 +86,15 @@ const editService = async (userId, serviceData) => {
 
 const deleteService = async (id) => {
   const serviceId = new mongoose.Types.ObjectId(id);
-  const serviceData = await service.findByIdAndDelete(serviceId);
+  const serviceData = await service.findByIdAndUpdate(
+    serviceId,
+    {
+      isDeleted: true,
+    },
+    {
+      new: true,
+    },
+  );
   if (!serviceData) {
     return handleResponse(
       StatusCodes.NOT_FOUND,
@@ -108,7 +119,7 @@ const listService = async (payload) => {
     sortBy = "service_name",
   } = payload || {};
 
-  let filter = {};
+  let filter = { isDeleted: false };
 
   if (search) {
     filter = {
