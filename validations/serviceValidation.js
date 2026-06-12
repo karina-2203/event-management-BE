@@ -2,10 +2,12 @@ const Joi = require("joi");
 
 const eventSchema = Joi.object({
   event_name: Joi.string().required().messages({
+    "string.base": "Event name must be a string",
     "string.empty": "Event name is don't empty field",
     "any.required": "Event name is required",
   }),
   event_description: Joi.string().required().messages({
+    "string.base": "Event description must be a string",
     "string.empty": "Event description is don't empty field",
     "any.required": "Event description is required",
   }),
@@ -16,13 +18,16 @@ const eventSchema = Joi.object({
 
 const updateEventSchema = Joi.object({
   event_id: Joi.string().required().messages({
+    "string.base": "Event ID must be a string",
     "string.empty": "Event ID is don't empty field",
     "any.required": "Event ID is required",
   }),
   event_name: Joi.string().optional().messages({
+    "string.base": "Event name must be a string",
     "string.empty": "Event name is don't empty field",
   }),
   event_description: Joi.string().optional().messages({
+    "string.base": "Event description must be a string",
     "string.empty": "Event description is don't empty field",
   }),
   event_image: Joi.array().items(Joi.string()).optional().messages({
@@ -54,6 +59,7 @@ const listEventSchema = Joi.object({
     .optional()
     .default("asc")
     .messages({
+      "string.base": "Sort order must be a string",
       "any.only": "Sort order must be either 'asc' or 'desc'",
     }),
 });
