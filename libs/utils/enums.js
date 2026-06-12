@@ -1,6 +1,6 @@
 const responseData = {
   SUCCESS: "success",
-  ERROR: "error"
+  ERROR: "error",
 };
 
 const status = {
@@ -14,8 +14,15 @@ const roles = {
   ORGANIZATION: "organization",
 };
 
+const bookingStatus = {
+  PENDING: "pending",
+  CANCELLED: "Cancelled",
+  APPROVED: "approved",
+};
+
 module.exports = {
   responseData,
   status,
   roles,
+  bookingStatus,
 };

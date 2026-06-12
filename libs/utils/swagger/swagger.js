@@ -35,6 +35,15 @@ const {
   listOfServicePath,
 } = require("./service.swagger");
 
+const {
+  bookingTag,
+  addBookingPath,
+  viewBookingPath,
+  editBookingPath,
+  deleteBookingPath,
+  listOfBookingPath,
+} = require("./booking.swagger");
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -50,7 +59,7 @@ const options = {
         description: "Development server",
       },
     ],
-    tags: [userTag, eventTag, serviceTag],
+    tags: [userTag, eventTag, serviceTag, bookingTag],
     paths: {
       // User paths
       ...createUserPath,
@@ -79,6 +88,13 @@ const options = {
       ...editServicePath,
       ...deleteServicePath,
       ...listOfServicePath,
+
+      // Booking paths
+      ...addBookingPath,
+      ...viewBookingPath,
+      ...editBookingPath,
+      ...deleteBookingPath,
+      ...listOfBookingPath,
     },
     components: {
       securitySchemes: {
