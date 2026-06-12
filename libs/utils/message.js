@@ -33,4 +33,6 @@ module.exports = {
   INVALID_STATE_ID: "Invalid state ID format",
   NO_STATES_FOUND: "No states found for this country",
   NO_CITIES_FOUND: "No cities found for this state",
+  EVENT_ID_REQUIRED: "Event ID is required",
+  SERVICE_ID_REQUIRED: "Service ID is required",
 };
