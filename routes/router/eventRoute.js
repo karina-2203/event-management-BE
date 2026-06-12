@@ -27,10 +27,10 @@ router.delete(
   authenticateToken,
   eventController.deleteEvent,
 );
-router.get(
+router.post(
   "/listOfEvent",
   authenticateToken,
-  validateRequest(listEventSchema, "query"),
+  validateRequest(listEventSchema, "body"),
   eventController.listEvent,
 );
 
