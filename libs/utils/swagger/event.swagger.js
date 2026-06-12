@@ -173,6 +173,11 @@ const viewEventPath = {
                         ],
                         description: "Array of event image filenames",
                       },
+                      isDeleted: {
+                        type: "boolean",
+                        example: false,
+                        description: "Soft delete flag",
+                      },
                       createdAt: {
                         type: "string",
                         format: "date-time",
@@ -298,8 +303,10 @@ const editEventPath = {
 const deleteEventPath = {
   "/api/eventMange/deleteEvent/{id}": {
     delete: {
-      summary: "Delete an event",
+      summary: "Soft delete an event",
       tags: ["Events"],
+      description:
+        "Performs a soft delete by setting isDeleted flag to true. The event remains in the database but won't appear in listings.",
       security: [
         {
           bearerAuth: [],
@@ -310,7 +317,7 @@ const deleteEventPath = {
           name: "id",
           in: "path",
           required: true,
-          description: "MongoDB ObjectId of the event to delete",
+          description: "MongoDB ObjectId of the event to soft delete",
           schema: {
             type: "string",
             example: "6a29062372d3530f311a1fc4",
@@ -362,7 +369,7 @@ const listOfEventPath = {
       summary: "Get list of events with search and pagination",
       tags: ["Events"],
       description:
-        "Retrieves a paginated list of events with optional search and sorting. All parameters are optional.",
+        "Retrieves a paginated list of non-deleted events with optional search and sorting. All parameters are optional. Only events where isDeleted is false are returned.",
       security: [
         {
           bearerAuth: [],
@@ -459,6 +466,11 @@ const listOfEventPath = {
                               example: ["file-1781161469640-761494847.png"],
                               description: "Array of event image filenames",
                             },
+                            isDeleted: {
+                              type: "boolean",
+                              example: false,
+                              description: "Soft delete flag",
+                            },
                             createdAt: {
                               type: "string",
                               format: "date-time",
@@ -520,7 +532,7 @@ const listOfDropdownEventsPath = {
       summary: "Get list of events for dropdown (simplified)",
       tags: ["Events"],
       description:
-        "Returns a simplified list of events with only ID and name for dropdown menus",
+        "Returns a simplified list of non-deleted events with only ID and name for dropdown menus. Only events where isDeleted is false are returned.",
       security: [
         {
           bearerAuth: [],
