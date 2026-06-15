@@ -36,4 +36,5 @@ module.exports = {
   EVENT_ID_REQUIRED: "Event ID is required",
   SERVICE_ID_REQUIRED: "Service ID is required",
   BOOKING_ID_REQUIRED: "Booking ID is required",
+  EVENT_DATE_VALIDATE: "Select future event dates",
 };

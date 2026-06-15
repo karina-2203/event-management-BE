@@ -10,7 +10,15 @@ const createBooking = async (userId, bookingData) => {
     ...bookingData,
     user_id: new mongoose.Types.ObjectId(userId),
   };
-
+  const eventDate = new Date(addBookingData.event_date);
+  const today = new Date();
+  if (eventDate < today) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.EVENT_DATE_VALIDATE,
+    );
+  }
   const createdBooking = await booking.create(addBookingData);
 
   return handleResponse(
@@ -55,7 +63,15 @@ const editBooking = async (userId, bookingData) => {
       message.BOOKING_ID_REQUIRED,
     );
   }
-
+  const eventDate = new Date(bookingData.event_date);
+  const today = new Date();
+  if (eventDate < today) {
+    return handleResponse(
+      StatusCodes.BAD_REQUEST,
+      responseData.ERROR,
+      message.EVENT_DATE_VALIDATE,
+    );
+  }
   const bookingId = new mongoose.Types.ObjectId(booking_id);
 
   const updateBookingData = {
@@ -138,6 +154,7 @@ const listBooking = async (payload) => {
 
   const listAllBooking = await booking
     .find(filter)
+    .select("-user_id -isDeleted")
     .populate("address_id", "address_line1")
     .populate("event_manage_id", "event_name")
     .limit(parseInt(limit))
