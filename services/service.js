@@ -138,6 +138,7 @@ const listService = async (payload) => {
 
   const listAllServices = await service
     .find(filter)
+    .select("-user_id -isDeleted")
     .limit(parseInt(limit))
     .skip(skip)
     .sort(sort);
