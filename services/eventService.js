@@ -130,6 +130,7 @@ const listEvent = async (payload) => {
 
   const listAllEvents = await event
     .find(filter)
+    .select("-user_id -isDeleted")
     .limit(parseInt(limit))
     .skip(skip)
     .sort(sort);
