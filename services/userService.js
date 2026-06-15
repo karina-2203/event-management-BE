@@ -108,7 +108,7 @@ const getProfile = async (userId) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -133,7 +133,7 @@ const updateProfile = async (userId, updateData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -151,7 +151,7 @@ const verifyEmail = async (userData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -189,7 +189,7 @@ const updatePassword = async (userData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -239,7 +239,7 @@ const changePassword = async (userId, passwordData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      message.NOT_FOUND,
     );
   }
 
@@ -304,7 +304,7 @@ const getState = async (req) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.COUNTRY_NOT_FOUND,
+      `Country ${message.NOT_FOUND}`,
     );
   }
 
@@ -328,7 +328,7 @@ const getCity = async (req) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.STATE_NOT_FOUND,
+      `State ${message.NOT_FOUND}`,
     );
   }
 
