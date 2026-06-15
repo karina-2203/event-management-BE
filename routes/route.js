@@ -3,6 +3,7 @@ const eventRoute = require("./router/eventRoute");
 const serviceRoute = require("./router/serviceRoute");
 const addressRoute = require("./router/addressRoute");
 const bookingRoute = require("./router/bookingRoute");
+const dashboardRoute = require("./router/dashboardRoute");
 
 module.exports = (app) => {
   app.use("/api", userRoute);
@@ -11,4 +12,5 @@ module.exports = (app) => {
   app.use("/api/serviceMange", serviceRoute);
   app.use("/api/address", addressRoute);
   app.use("/api/booking", bookingRoute);
+  app.use("/api/dashboard", dashboardRoute);
 };
