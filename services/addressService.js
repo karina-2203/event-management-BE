@@ -138,6 +138,7 @@ const listAddress = async (payload) => {
 
   const listAllAddresses = await address
     .find(filter)
+    .select("-user_id -isDeleted")
     .populate("country_id", "country_name")
     .populate("state_id", "state_name")
     .populate("city_id", "city_name")
