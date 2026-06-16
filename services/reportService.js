@@ -7,89 +7,134 @@ const handleResponse = require("../libs/helpers/handleResponse");
 const { StatusCodes } = require("http-status-codes");
 const { responseData, months } = require("../libs/utils/enums");
 
-const eventReport = async (payload) => {
+const eventReport = async (user, payload) => {
+  const isAdmin = user === "admin";
   let filter = { isDeleted: false };
 
-  // Add date filtering if event_date is provided in payload
   if (payload.event_date) {
     const startDate = new Date(payload.event_date);
-    startDate.setHours(0, 0, 0, 0); // Start of the day
 
-    // const endDate = new Date(payload.event_date);
-    // endDate.setHours(23, 59, 59, 999); // End of the day
-
-    // Filter by event_date (booking date) range
     filter.event_date = {
-      $gte: startDate,
-      // $lte: endDate
+      $eq: startDate,
     };
   }
 
-  // Get bookings with populated event details
   const bookingData = await booking
     .find(filter)
     .populate("event_manage_id", "event_name")
-    .select("event_date event_manage_id");
-
-  // Format the response with event_name and formatted event_date
+    .populate("user_id", "name email")
+    .populate({
+      path: "address_id",
+      select: "address_line1 city_id state_id",
+      populate: [
+        {
+          path: "city_id",
+          select: "city_name",
+        },
+        {
+          path: "state_id",
+          select: "state_name",
+        },
+      ],
+    })
+    .select("event_date event_manage_id user_id address_id city_id state_id");
   const eventData = bookingData.map((item) => {
     const eventDate = new Date(item.event_date);
-    const formattedDate = eventDate.toISOString().split("T")[0]; // yyyy-mm-dd format
-
-    return {
-      event_name: item.event_manage_id?.event_name || "N/A",
-      event_date: formattedDate,
-    };
+    const formattedDate = eventDate.toISOString().split("T")[0];
+    if (isAdmin) {
+      return {
+        event_name: item.event_manage_id?.event_name,
+        event_date: formattedDate,
+        user_name: item.user_id?.name,
+        user_email: item.user_id?.email,
+        address: item.address_id?.address_line1,
+        city: item.address_id?.city_id?.city_name,
+        state: item.address_id?.state_id?.state_name,
+      };
+    } else {
+      return {
+        event_name: item.event_manage_id?.event_name,
+        event_date: formattedDate,
+        status: item.status,
+      };
+    }
   });
 
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
-    `Events ${message.GET_SUCCESS}`,
+    `Event Report ${message.GET_SUCCESS}`,
     eventData,
   );
 };
 
-const bookingReport = async (payload) => {
+const bookingReport = async (user, payload) => {
+  const isAdmin = user === "admin";
   let filter = { isDeleted: false };
 
-  // Add date filtering if event_date is provided in payload
   if (payload.event_date) {
     const startDate = new Date(payload.event_date);
-    startDate.setHours(0, 0, 0, 0); // Start of the day
 
-    // const endDate = new Date(payload.event_date);
-    // endDate.setHours(23, 59, 59, 999); // End of the day
-
-    // Filter by event_date (booking date) range
     filter.event_date = {
-      $gte: startDate,
-      // $lte: endDate
+      $eq: startDate,
     };
   }
 
-  // Get bookings with populated event details
   const bookingData = await booking
     .find(filter)
     .populate("event_manage_id", "event_name")
-    .select("event_date event_manage_id");
+    .populate("user_id", "name email")
+    .populate({
+      path: "address_id",
+      select: "address_line1 city_id state_id",
+      populate: [
+        {
+          path: "city_id",
+          select: "city_name",
+        },
+        {
+          path: "state_id",
+          select: "state_name",
+        },
+      ],
+    })
+    .select(
+      "event_date event_manage_id user_id address_id city_id state_id status additional_information",
+    );
 
-  // Format the response with event_name and formatted event_date
-  const eventData = bookingData.map((item) => {
+  const bookingReportData = bookingData.map((item) => {
     const eventDate = new Date(item.event_date);
-    const formattedDate = eventDate.toISOString().split("T")[0]; // yyyy-mm-dd format
-
-    return {
-      event_name: item.event_manage_id?.event_name || "N/A",
-      event_date: formattedDate,
-    };
+    const formattedDate = eventDate.toISOString().split("T")[0];
+    if (isAdmin) {
+      return {
+        event_name: item.event_manage_id?.event_name,
+        event_date: formattedDate,
+        user_name: item.user_id?.name,
+        user_email: item.user_id?.email,
+        address: item.address_id?.address_line1,
+        city: item.address_id?.city_id?.city_name,
+        state: item.address_id?.state_id?.state_name,
+        status: item.status,
+        additional_information: item.additional_information,
+      };
+    } else {
+      return {
+        event_name: item.event_manage_id?.event_name,
+        event_date: formattedDate,
+        address: item.address_id?.address_line1,
+        city: item.address_id?.city_id?.city_name,
+        state: item.address_id?.state_id?.state_name,
+        status: item.status,
+        additional_information: item.additional_information,
+      };
+    }
   });
 
   return handleResponse(
     StatusCodes.OK,
     responseData.SUCCESS,
-    `Events ${message.GET_SUCCESS}`,
-    eventData,
+    `Booking Report ${message.GET_SUCCESS}`,
+    bookingReportData,
   );
 };
 

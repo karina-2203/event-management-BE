@@ -16,7 +16,7 @@ router.post(
   "/bookingReport",
   authenticateToken,
   validateRequest(reportSchema, "body"),
-  reportController.eventReport,
+  reportController.bookingReport,
 );
 
 module.exports = router;
