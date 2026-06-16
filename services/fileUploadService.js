@@ -5,10 +5,10 @@ const { StatusCodes } = require("http-status-codes");
 const message = require("../libs/utils/message");
 
 /**
- * File upload service - handles file upload and converts image to binary
- * @param {Object} fileData - File data from multer
+ * File upload service - handles single or multiple file uploads
+ * @param {Object|Array} fileData - File data from multer (single file object or array of files)
  * @param {Object} error - Multer error if any
- * @returns {Object} Response with file key and binary data
+ * @returns {Object} Response with file key(s) and binary data
  */
 const fileUpload = async (fileData, error = null) => {
   try {
@@ -26,7 +26,7 @@ const fileUpload = async (fileData, error = null) => {
         return handleResponse(
           StatusCodes.BAD_REQUEST,
           responseData.ERROR,
-          errorMessage
+          errorMessage,
         );
       }
 
@@ -35,7 +35,7 @@ const fileUpload = async (fileData, error = null) => {
         return handleResponse(
           StatusCodes.BAD_REQUEST,
           responseData.ERROR,
-          message.ONLY_IMAGE_ALLOWED
+          message.ONLY_IMAGE_ALLOWED,
         );
       }
 
@@ -43,18 +43,33 @@ const fileUpload = async (fileData, error = null) => {
       return handleResponse(
         StatusCodes.INTERNAL_SERVER_ERROR,
         responseData.ERROR,
-        error.message || message.FILE_UPLOAD_ERROR
+        error.message || message.FILE_UPLOAD_ERROR,
       );
     }
 
-    if (!fileData) {
+    if (!fileData || (Array.isArray(fileData) && fileData.length === 0)) {
       return handleResponse(
         StatusCodes.BAD_REQUEST,
         responseData.ERROR,
-        message.NO_FILE_UPLOADED
+        message.NO_FILE_UPLOADED,
       );
     }
 
+    // Handle multiple files
+    if (Array.isArray(fileData)) {
+      const uploadedFiles = fileData.map((file) => file.filename);
+
+      return handleResponse(
+        StatusCodes.OK,
+        responseData.SUCCESS,
+        uploadedFiles.length === 1
+          ? `Image ${message.ADD_SUCCESS}`
+          : `Images ${message.ADD_SUCCESS}`,
+        uploadedFiles,
+      );
+    }
+
+    // Handle single file
     // Get file path
     const filePath = fileData.path;
 
@@ -74,7 +89,7 @@ const fileUpload = async (fileData, error = null) => {
     return handleResponse(
       StatusCodes.INTERNAL_SERVER_ERROR,
       responseData.ERROR,
-      error.message || message.FILE_UPLOAD_ERROR
+      error.message || message.FILE_UPLOAD_ERROR,
     );
   }
 };

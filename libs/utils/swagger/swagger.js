@@ -16,16 +16,33 @@ const {
   listOfCityPath,
 } = require("./user.swagger");
 
-// Add new module swagger imports here as the project grows:
-// const { authTag, loginPath } = require("./auth.swagger");
+const {
+  eventTag,
+  addEventPath,
+  viewEventPath,
+  editEventPath,
+  deleteEventPath,
+  listOfEventPath,
+  listOfDropdownEventsPath,
+} = require("./event.swagger");
+
+const {
+  serviceTag,
+  addServicePath,
+  viewServicePath,
+  editServicePath,
+  deleteServicePath,
+  listOfServicePath,
+} = require("./service.swagger");
 
 const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "API Documentation",
+      title: "Event Management API Documentation",
       version: "1.0.0",
-      description: "API endpoints documentation",
+      description:
+        "Complete API endpoints documentation for Event Management System",
     },
     servers: [
       {
@@ -33,11 +50,9 @@ const options = {
         description: "Development server",
       },
     ],
-    tags: [
-      userTag,
-      // authTag,
-    ],
+    tags: [userTag, eventTag, serviceTag],
     paths: {
+      // User paths
       ...createUserPath,
       ...loginPath,
       ...fileUploadPath,
@@ -49,6 +64,21 @@ const options = {
       ...listOfCountryPath,
       ...listOfStatePath,
       ...listOfCityPath,
+
+      // Event paths
+      ...addEventPath,
+      ...viewEventPath,
+      ...editEventPath,
+      ...deleteEventPath,
+      ...listOfEventPath,
+      ...listOfDropdownEventsPath,
+
+      // Service paths
+      ...addServicePath,
+      ...viewServicePath,
+      ...editServicePath,
+      ...deleteServicePath,
+      ...listOfServicePath,
     },
     components: {
       securitySchemes: {
@@ -56,6 +86,7 @@ const options = {
           type: "http",
           scheme: "bearer",
           bearerFormat: "JWT",
+          description: "Enter JWT token in format: Bearer <token>",
         },
       },
     },
