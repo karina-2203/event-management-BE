@@ -57,10 +57,14 @@ const createUser = async (userData) => {
 /**
  * Generate JWT token for authenticated user
  */
-const generateAuthToken = (userId) => {
-  const token = jwt.sign({ _id: userId }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+const generateAuthToken = (userId, UserRole) => {
+  const token = jwt.sign(
+    { _id: userId, role: UserRole },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    },
+  );
   return token;
 };
 
@@ -88,7 +92,7 @@ const login = async (loginData) => {
     );
   }
 
-  const token = generateAuthToken(userRecord._id);
+  const token = generateAuthToken(userRecord._id, userRecord.role);
   const payload = {
     token,
   };
@@ -108,7 +112,7 @@ const getProfile = async (userId) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -133,7 +137,7 @@ const updateProfile = async (userId, updateData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -151,7 +155,7 @@ const verifyEmail = async (userData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -189,7 +193,7 @@ const updatePassword = async (userData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      `User ${message.NOT_FOUND}`,
     );
   }
 
@@ -239,7 +243,7 @@ const changePassword = async (userId, passwordData) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.USER_NOT_FOUND,
+      message.NOT_FOUND,
     );
   }
 
@@ -304,7 +308,7 @@ const getState = async (req) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.COUNTRY_NOT_FOUND,
+      `Country ${message.NOT_FOUND}`,
     );
   }
 
@@ -328,7 +332,7 @@ const getCity = async (req) => {
     return handleResponse(
       StatusCodes.NOT_FOUND,
       responseData.ERROR,
-      message.STATE_NOT_FOUND,
+      `State ${message.NOT_FOUND}`,
     );
   }
 
