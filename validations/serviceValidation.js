@@ -1,41 +1,44 @@
 const Joi = require("joi");
 
-const eventSchema = Joi.object({
-  event_name: Joi.string().required().messages({
-    "string.base": "Event name must be a string",
-    "string.empty": "Event name is don't empty field",
-    "any.required": "Event name is required",
-  }),
-  event_description: Joi.string().required().messages({
-    "string.base": "Event description must be a string",
-    "string.empty": "Event description is don't empty field",
-    "any.required": "Event description is required",
-  }),
-  event_image: Joi.array().items(Joi.string()).optional().messages({
-    "array.base": "Event image must be an array",
-  }),
-});
-
-const updateEventSchema = Joi.object({
-  event_id: Joi.string().required().messages({
-    "string.base": "Event ID must be a string",
+const serviceSchema = Joi.object({
+  event_manage_id: Joi.string().required().messages({
     "string.empty": "Event ID is don't empty field",
     "any.required": "Event ID is required",
   }),
-  event_name: Joi.string().optional().messages({
-    "string.base": "Event name must be a string",
-    "string.empty": "Event name is don't empty field",
+  service_name: Joi.string().required().messages({
+    "string.empty": "Service name is don't empty field",
+    "any.required": "Service name is required",
   }),
-  event_description: Joi.string().optional().messages({
-    "string.base": "Event description must be a string",
-    "string.empty": "Event description is don't empty field",
+  service_description: Joi.string().required().messages({
+    "string.empty": "Service description is don't empty field",
+    "any.required": "Service description is required",
   }),
-  event_image: Joi.array().items(Joi.string()).optional().messages({
-    "array.base": "Event image must be an array",
+  price: Joi.number().required().messages({
+    "number.empty": "Price is don't empty field",
+    "any.required": "Price is required",
   }),
 });
 
-const listEventSchema = Joi.object({
+const updateServiceSchema = Joi.object({
+  service_id: Joi.string().required().messages({
+    "string.empty": "Service ID is don't empty field",
+    "any.required": "Service ID is required",
+  }),
+  event_manage_id: Joi.string().optional().messages({
+    "string.empty": "Event ID is don't empty field",
+  }),
+  service_name: Joi.string().optional().messages({
+    "string.empty": "Service name is don't empty field",
+  }),
+  service_description: Joi.string().optional().messages({
+    "string.empty": "Service description is don't empty field",
+  }),
+  price: Joi.number().optional().messages({
+    "number.empty": "Price is don't empty field",
+  }),
+});
+
+const listServiceSchema = Joi.object({
   search: Joi.string().optional().allow("").messages({
     "string.base": "Search must be a string",
   }),
@@ -59,13 +62,19 @@ const listEventSchema = Joi.object({
     .optional()
     .default("asc")
     .messages({
-      "string.base": "Sort order must be a string",
       "any.only": "Sort order must be either 'asc' or 'desc'",
+    }),
+  sortBy: Joi.string()
+    .valid("service_name", "price")
+    .optional()
+    .default("service_name")
+    .messages({
+      "any.only": "Sort by must be one of: service_name, price",
     }),
 });
 
 module.exports = {
-  eventSchema,
-  updateEventSchema,
-  listEventSchema,
+  serviceSchema,
+  updateServiceSchema,
+  listServiceSchema,
 };

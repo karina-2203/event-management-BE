@@ -153,10 +153,22 @@ const listEvent = async (payload) => {
   );
 };
 
+const getListEvents = async () => {
+  const listEvents = await event.find().select("event_name");
+
+  return handleResponse(
+    StatusCodes.OK,
+    responseData.SUCCESS,
+    `Event ${message.GET_SUCCESS}`,
+    listEvents,
+  );
+};
+
 module.exports = {
   createEvent,
   getEvent,
   editEvent,
   deleteEvent,
   listEvent,
+  getListEvents,
 };

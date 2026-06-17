@@ -30,10 +30,16 @@ const listEvent = async (req, res) => {
   return res.status(StatusCodes.OK).json(responseData);
 };
 
+const getListEvents = async (_req, res) => {
+  const responseData = await eventService.getListEvents();
+  return res.status(StatusCodes.OK).json(responseData);
+};
+
 module.exports = {
   createEvent,
   getEvent,
   editEvent,
   deleteEvent,
   listEvent,
+  getListEvents,
 };

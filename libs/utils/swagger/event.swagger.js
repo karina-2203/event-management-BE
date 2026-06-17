@@ -304,7 +304,7 @@ const editEventPath = {
 const deleteEventPath = {
   "/api/eventMange/deleteEvent/{id}": {
     delete: {
-      summary: "Delete an event",
+      summary: "Soft delete an event",
       tags: ["Events"],
       description:
         "Performs a soft delete by setting isDeleted flag to true. The event remains in the database but won't appear in listings or be retrievable.",
@@ -527,6 +527,48 @@ const listOfEventPath = {
   },
 };
 
+const listOfDropdownEventsPath = {
+  "/api/eventMange/listOfDropdownEvents": {
+    get: {
+      summary: "Get list of events for dropdown (simplified)",
+      tags: ["Events"],
+      description:
+        "Returns a simplified list of non-deleted events with only ID and name for dropdown menus. Only events where isDeleted is false are returned.",
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      responses: {
+        200: {
+          description: "Events retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  statusCode: {
+                    type: "number",
+                    example: 200,
+                  },
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Events get successfully",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
 module.exports = {
   eventTag,
   addEventPath,
@@ -534,4 +576,5 @@ module.exports = {
   editEventPath,
   deleteEventPath,
   listOfEventPath,
+  listOfDropdownEventsPath,
 };

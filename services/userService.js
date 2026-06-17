@@ -57,10 +57,14 @@ const createUser = async (userData) => {
 /**
  * Generate JWT token for authenticated user
  */
-const generateAuthToken = (userId) => {
-  const token = jwt.sign({ _id: userId }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+const generateAuthToken = (userId, UserRole) => {
+  const token = jwt.sign(
+    { _id: userId, role: UserRole },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    },
+  );
   return token;
 };
 
@@ -88,7 +92,7 @@ const login = async (loginData) => {
     );
   }
 
-  const token = generateAuthToken(userRecord._id);
+  const token = generateAuthToken(userRecord._id, userRecord.role);
   const payload = {
     token,
   };

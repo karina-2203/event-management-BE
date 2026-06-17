@@ -6,7 +6,7 @@ const {
   eventSchema,
   updateEventSchema,
   listEventSchema,
-} = require("../../validations/serviceValidation");
+} = require("../../validations/eventValidation");
 const { authenticateToken } = require("../../libs/service/authentication/auth");
 
 router.post(
@@ -27,11 +27,16 @@ router.delete(
   authenticateToken,
   eventController.deleteEvent,
 );
-router.post(
+router.get(
   "/listOfEvent",
   authenticateToken,
-  validateRequest(listEventSchema, "body"),
+  validateRequest(listEventSchema, "query"),
   eventController.listEvent,
+);
+router.get(
+  "/listOfDropdownEvents",
+  authenticateToken,
+  eventController.getListEvents,
 );
 
 module.exports = router;
